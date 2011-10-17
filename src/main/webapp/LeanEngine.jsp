@@ -27,7 +27,7 @@
 <p>
     Login with&nbsp
     <a href='/login/facebook-start.jsp?redirect=<%= request.getRequestURI()%>'><img src="images/facebook.png" alt="Facebook login"/></a>
-    <a href='/login/openid-start.jsp?redirect=<%= request.getRequestURI()%>&provider=google'><img src="images/google.png" alt="Google login"/></a>
+    <a href='/login/openid-start.jsp?redirect=@LeanEngine.jsp&provider=google'><img src="images/google.png" alt="Google login"/></a>
     <a href='/login/openid-start.jsp?redirect=<%= request.getRequestURI()%>&provider=yahoo'><img src="images/yahoo.png" alt="Yahoo login"/></a>
 </p>
 <hr/>

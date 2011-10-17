@@ -6,8 +6,6 @@
     // default OpenID provider is Google
     String openIdProvider = request.getParameter("provider");
 
-
-
     // is it a shortcut?
     if (openIdProvider == null || openIdProvider.equals("google")) {
         openIdProvider = "https://www.google.com/accounts/o8/id";
@@ -15,8 +13,13 @@
         openIdProvider = "https://me.yahoo.com";
     }
 
-    String redirectUrl = request.getParameter("redirect") == null ? "/login/logindone.jsp" : request.getParameter("redirect");
-    redirectUrl = redirectUrl + "?type=" + type;
+    // redirectUrl is composed so that it redirects twice:
+    // first to /login/openid-auth.jsp for authentication
+    // second to the final destination URL
+    String redirectUrl = request.getParameter("redirect") == null ?
+            "/login/openid-auth.jsp?&next=/login/logindone.jsp&type="+type :
+            "/login/openid-auth.jsp?next="+request.getParameter("redirect")+"&type="+type;
+
     String loginUrl = UserServiceFactory.getUserService().createLoginURL(redirectUrl, null, openIdProvider, null);
 
     response.sendRedirect(loginUrl);
