@@ -1,0 +1,29 @@
+@charset "UTF-8";
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+table.sample {
+	border-width: 1px;
+	border-spacing: 2px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse;
+	background-color: white;
+	padding: 2px;
+}
+table.sample th {
+	border-width: 1px;
+	border-style: inset;
+	border-color: gray;
+	background-color: #CCC;
+	-moz-border-radius: ;
+}
+table.sample td {
+	border-width: 1px;
+	border-style: inset;
+	border-color: gray;
+	background-color: white;
+	-moz-border-radius: ;
+}
+
+
