@@ -11,6 +11,7 @@
 
     <admin-console>
         <page name="LeanEngine Settings" url="/admin/settings.jsp"/>
+        <page name="LeanEngine Scripts" url="/admin/scripts.jsp"/>
     </admin-console>
 
 </appengine-web-app>

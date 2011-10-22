@@ -5,10 +5,13 @@ import com.leanengine.server.rpc.rest.*;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class RestApplication extends Application {
 
     private Set<Object> singletons = new HashSet<Object>();
+
+    private static final Logger log = Logger.getLogger(RestApplication.class.getName());
 
 
     public RestApplication() {
@@ -18,6 +21,7 @@ public class RestApplication extends Application {
         singletons.add(new RestExceptionMapper());
         singletons.add(new EntityRest());
         singletons.add(new PublicServiceRest());
+        singletons.add(new ScriptRest());
 
     }
 

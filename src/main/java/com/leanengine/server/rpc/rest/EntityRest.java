@@ -4,7 +4,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.appengine.DatastoreUtils;
 import org.codehaus.jackson.JsonNode;
-import org.json.JSONException;
 
 import javax.ws.rs.*;
 import java.util.HashMap;

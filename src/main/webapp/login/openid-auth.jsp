@@ -21,9 +21,6 @@
     }
 
     String nextUrl = request.getParameter("next");
-    if(nextUrl!=null){
-        nextUrl = nextUrl.replace("@", "/");
-    }
 
     // get user
     User currentUser = UserServiceFactory.getUserService().getCurrentUser();

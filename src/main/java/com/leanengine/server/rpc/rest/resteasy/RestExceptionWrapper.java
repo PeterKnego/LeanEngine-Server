@@ -1,7 +1,9 @@
 package com.leanengine.server.rpc.rest.resteasy;
 
 import com.leanengine.server.LeanException;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class RestExceptionWrapper {
 
     public int code;

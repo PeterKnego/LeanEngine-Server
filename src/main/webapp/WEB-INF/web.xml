@@ -47,6 +47,6 @@
     <!--</filter-mapping>-->
 
     <welcome-file-list>
-        <welcome-file>LeanEngine.jsp</welcome-file>
+        <welcome-file>home.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
