@@ -16,32 +16,40 @@ public class LeanEngineSettings {
         try {
             leanEntity = datastore.get(key);
             settings = leanEntity.getProperties();
-            return settings;
         } catch (EntityNotFoundException e) {
-            return new HashMap<String, Object>();
+            settings = new HashMap<String, Object>();
         }
+        return settings;
     }
 
-    public static void saveSettings(Map<String, Object> settings) {
+    public static void saveSettings(Map<String, Object> newSettings) {
         // there is only one instance of LeanEngineSettings so the same ID=1 is always used
         Entity leanEntity = new Entity("_settings", 1);
-        for (String propName : settings.keySet()) {
-            leanEntity.setProperty(propName, settings.get(propName));
+        for (String propName : newSettings.keySet()) {
+            leanEntity.setProperty(propName, newSettings.get(propName));
         }
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(leanEntity);
+        LeanEngineSettings.settings = newSettings;
     }
 
+    public static boolean isFacebookLoginEnabled() {
+        if (settings == null) load();
+        Object fbLoginEnable = settings.get("fbLoginEnable");
+        return fbLoginEnable == null ? false : (Boolean) fbLoginEnable;
+    }
+
+
     public static String getFacebookAppID() {
-//        if (settings == null) load();
-//        return (String) settings.get("facebookAppID");
-        return "167040553377961";
+        if (settings == null) load();
+        return (String) settings.get("fbAppId");
+//        return "167040553377961";
     }
 
     public static String getFacebookAppSecret() {
-//        if (settings == null) load();
-//        return (String) settings.get("facebookAppSecret");
-        return "39d80791024bf21ca584a9204d6733da";
+        if (settings == null) load();
+        return (String) settings.get("fbAppSecret");
+//        return "39d80791024bf21ca584a9204d6733da";
     }
 
     /**
@@ -50,9 +58,26 @@ public class LeanEngineSettings {
      * @return Map of application settings.
      */
     public static Map<String, Object> getSettings() {
-        if (settings == null) load();
+        load();
         return settings;
     }
 
+    /**
+     * Helper class for one-line saving of multiple settings.
+     */
+    public static class Builder {
+
+        private Map<String, Object> temp = new HashMap<String, Object>();
+
+        public Builder add(String name, Object value) {
+            temp.put(name, value);
+            return this;
+        }
+
+        public void save() {
+            if (!temp.isEmpty()) LeanEngineSettings.saveSettings(temp);
+        }
+
+    }
 
 }

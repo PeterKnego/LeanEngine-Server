@@ -3,7 +3,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String facebookAppID = LeanEngineSettings.getFacebookAppID();
     String type = request.getParameter("type");
     Scheme scheme;
     String facebookAntiCSRF;
@@ -22,10 +21,15 @@
         // login via web interface
         scheme = new WebScheme(request.getScheme(), request.getServerName());
         // indicating request comes from browser
-        facebookAntiCSRF = "web:" + UUID.randomUUID().toString()+":"+redirectUrl;
+        facebookAntiCSRF = "web:" + UUID.randomUUID().toString() + ":" + redirectUrl;
     }
 
-    if (facebookAppID == null) {
+    // Facebook login is not enabled in settings
+    if (!LeanEngineSettings.isFacebookLoginEnabled()) {
+        response.sendRedirect(scheme.getErrorUrl(2, "Server not configured properly: Facebook Login is not enabled."));
+    }
+
+    if (LeanEngineSettings.getFacebookAppID() == null) {
         // error: facebookAppID not set
         response.sendRedirect(scheme.getErrorUrl(2, "Server not configured properly: missing Facebook Application ID"));
     }
@@ -36,7 +40,7 @@
 
     // get Facebook OAuth Login URL
     String loginUrl = isMobile ?
-            FacebookAuth.getLoginUrlMobile(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF):
+            FacebookAuth.getLoginUrlMobile(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF) :
             FacebookAuth.getLoginUrlWeb(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF);
     response.sendRedirect(loginUrl);
 
