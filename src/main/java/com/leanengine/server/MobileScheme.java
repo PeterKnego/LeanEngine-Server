@@ -18,19 +18,20 @@ public class MobileScheme implements Scheme {
     }
 
     @Override
-    public String getUrl( String authToken, String redirectUrl) {
+    public String getUrl(String authToken, String redirectUrl) {
         return scheme + hostname + "/?auth_token=" + authToken;
     }
 
     @Override
-    public String getErrorUrl(int errorCode, String errorMsg) {
-        return getErrorUrl(errorCode, errorMsg, null);
+    public String getErrorUrl(LeanException exception) {
+        return getErrorUrl(exception, null);
     }
 
     @Override
-    public String getErrorUrl( int errorCode, String errorMsg, String redirectUrl) {
+    public String getErrorUrl(LeanException exception, String redirectUrl) {
         try {
-            return scheme + hostname + "/?errorcode=" + errorCode + "&errormsg=" + URLEncoder.encode(errorMsg, "UTF-8");
+            return scheme + hostname + "/?errorcode=" + exception.getErrorCode() +
+                    "&errormsg=" + URLEncoder.encode(exception.getMessage(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             // should not happen - UTF-8 is supported on all JVMs
             return null;

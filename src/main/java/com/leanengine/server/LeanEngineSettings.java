@@ -43,13 +43,17 @@ public class LeanEngineSettings {
     public static String getFacebookAppID() {
         if (settings == null) load();
         return (String) settings.get("fbAppId");
-//        return "167040553377961";
     }
 
     public static String getFacebookAppSecret() {
         if (settings == null) load();
         return (String) settings.get("fbAppSecret");
-//        return "39d80791024bf21ca584a9204d6733da";
+    }
+
+    public static boolean isOpenIdLoginEnabled() {
+        if (settings == null) load();
+        Object openIdLoginEnable = settings.get("openIdLoginEnable");
+        return openIdLoginEnable == null ? false : (Boolean) openIdLoginEnable;
     }
 
     /**

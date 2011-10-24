@@ -11,12 +11,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>LeanEngine Demo</title>
-    <%--<link rel="stylesheet" href="bootstrap.css">--%>
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 </head>
 <%
     LeanAccount account = AuthService.getCurrentAccount();
     String show = request.getParameter("show") == null ? "entities" : request.getParameter("show");
+    boolean isLoginError = request.getParameter("errorlogin") != null
+            && request.getParameter("errorlogin").equals("true") ? true : false;
+
 %>
 <body style="padding-top: 42px;">
 
@@ -73,7 +76,6 @@
 <div class="container">
     <div class="row">
         <div class="span16">
-
             <%
                 if (account != null) {
             %>

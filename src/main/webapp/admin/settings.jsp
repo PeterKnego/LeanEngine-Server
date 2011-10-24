@@ -4,13 +4,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="../bootstrap.css">
-    <%--<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">--%>
-    <%--<link href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.css" rel="stylesheet">--%>
-    <%--<link href="http://twitter.github.com/bootstrap/assets/css/docs.css" rel="stylesheet">--%>
-    <%--<link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">--%>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
 
     <script type="text/javascript">
         $.fn.disableFunc = function(val) {
@@ -20,7 +16,7 @@
         };
 
         checkAndSubmit = function() {
-            if ($("#fbAppId").val() == "" || $("#fbAppSecret").val() == "") {
+            if ($('#fbLoginEnable').is(':checked') && ($("#fbAppId").val() == "" || $("#fbAppSecret").val() == "")) {
                 $("#fbMissingDataError").show("fast").delay(3000).hide("fast");
             } else {
                 document.forms["settingsForm"].submit();
@@ -33,7 +29,7 @@
             $('#fbAppSecret').disableFunc(dis);
         };
 
-        saved = function(){
+        saved = function() {
             $('#savedNotification').show("fast").delay(3000).hide("fast");
         };
     </script>

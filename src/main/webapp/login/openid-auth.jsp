@@ -27,7 +27,7 @@
 
     //OpenID login did not succeed
     if (currentUser == null) {
-        response.sendRedirect(scheme.getErrorUrl(15, "OpenID authentication failed."));
+        response.sendRedirect(scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthFailed)));
     }
     // get toke for this user
     AuthToken authToken;

@@ -20,7 +20,11 @@ public class FacebookAuth {
 
     static private ObjectMapper mapper = new ObjectMapper();
 
-    public static String getLoginUrlMobile(String serverName, String state) {
+    public static String getLoginUrlMobile(String serverName, String state) throws LeanException {
+        if (LeanEngineSettings.getFacebookAppID() == null) {
+            throw new LeanException(LeanException.Error.FacebookAuthMissingAppId);
+        }
+
         String redirectUrl = serverName + "/login/facebook-auth.jsp";
         return "https://m.facebook.com/dialog/oauth?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
@@ -29,7 +33,11 @@ public class FacebookAuth {
                 "state=" + state;
     }
 
-    public static String getLoginUrlWeb(String serverName, String state) {
+    public static String getLoginUrlWeb(String serverName, String state) throws LeanException {
+        if (LeanEngineSettings.getFacebookAppID() == null) {
+            throw new LeanException(LeanException.Error.FacebookAuthMissingAppId);
+        }
+
         String redirectUrl = serverName + "/login/facebook-auth.jsp";
         return "https://www.facebook.com/dialog/oauth?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
@@ -38,7 +46,15 @@ public class FacebookAuth {
                 "state=" + state;
     }
 
-    public static String getGraphAuthUrl(String redirectUrl, String code) {
+    public static String getGraphAuthUrl(String redirectUrl, String code) throws LeanException {
+        if (LeanEngineSettings.getFacebookAppID() == null) {
+            throw new LeanException(LeanException.Error.FacebookAuthMissingAppId);
+        }
+
+        if (LeanEngineSettings.getFacebookAppID() == null) {
+            throw new LeanException(LeanException.Error.FacebookAuthMissingAppSecret);
+        }
+
         return "https://graph.facebook.com/oauth/access_token?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
                 "redirect_uri=" + redirectUrl + "&" +
@@ -86,7 +102,7 @@ public class FacebookAuth {
 
             if (splitResponse.length != 2) {
                 // error: facebook should return two arguments: access_token & expires
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParamError);
+                throw new LeanException(LeanException.Error.FacebookAuthMissingParam);
             }
             for (String split : splitResponse) {
                 String[] parts = split.split("=");
@@ -98,7 +114,7 @@ public class FacebookAuth {
             // check if we got required parameters
             if (fbAccessToken == null || expires == null) {
                 //error: wrong parameters: facebook should return 'access_token' and 'expires' parameters
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParamError);
+                throw new LeanException(LeanException.Error.FacebookAuthMissingParam);
             }
 
             // All is good - check the user
@@ -107,7 +123,7 @@ public class FacebookAuth {
 
             if (providerID == null || providerID.length() == 0) {
                 //Facebook returned user data, but email field is missing
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParamError);
+                throw new LeanException(LeanException.Error.FacebookAuthMissingParam);
             }
 
             LeanAccount account = DatastoreUtils.findAccountByProvider(providerID, "fb-oauth");
@@ -124,9 +140,9 @@ public class FacebookAuth {
             return AuthService.createAuthToken(account.id);
 
         } catch (MalformedURLException e) {
-            throw new LeanException(LeanException.Error.FacebookAuthNoConnectionError, e);
+            throw new LeanException(LeanException.Error.FacebookAuthNoConnection, e);
         } catch (IOException e) {
-            throw new LeanException(LeanException.Error.FacebookAuthNoConnectionError, e);
+            throw new LeanException(LeanException.Error.FacebookAuthNoConnection, e);
         }
     }
 

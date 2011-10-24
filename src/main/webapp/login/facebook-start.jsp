@@ -26,12 +26,8 @@
 
     // Facebook login is not enabled in settings
     if (!LeanEngineSettings.isFacebookLoginEnabled()) {
-        response.sendRedirect(scheme.getErrorUrl(2, "Server not configured properly: Facebook Login is not enabled."));
-    }
-
-    if (LeanEngineSettings.getFacebookAppID() == null) {
-        // error: facebookAppID not set
-        response.sendRedirect(scheme.getErrorUrl(2, "Server not configured properly: missing Facebook Application ID"));
+        response.sendRedirect(scheme.getErrorUrl(new LeanException(LeanException.Error.FacebookAuthNotEnabled)));
+        return;
     }
 
     // 'state' parameter is passed around the Facebook OAuth redirects and ends up at our final auth page
@@ -39,9 +35,15 @@
     session.setAttribute("antiCSRF", facebookAntiCSRF);
 
     // get Facebook OAuth Login URL
-    String loginUrl = isMobile ?
-            FacebookAuth.getLoginUrlMobile(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF) :
-            FacebookAuth.getLoginUrlWeb(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF);
+    String loginUrl = null;
+    try {
+        loginUrl = isMobile ?
+                FacebookAuth.getLoginUrlMobile(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF) :
+                FacebookAuth.getLoginUrlWeb(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF);
+    } catch (LeanException e) {
+        response.sendRedirect(scheme.getErrorUrl(e));
+        return;
+    }
     response.sendRedirect(loginUrl);
 
 %>

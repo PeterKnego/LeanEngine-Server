@@ -10,8 +10,8 @@
     String state = request.getParameter("state");
     if (state == null || !state.equals(session.getAttribute("antiCSRF"))) {
         // oauth error - redirect back to client with error
-        response.sendRedirect(new WebScheme(request.getScheme(), request.getScheme()).getErrorUrl(1,
-                "CSRF protection code missing."));
+        response.sendRedirect(new WebScheme(request.getScheme(), request.getScheme()).getErrorUrl(
+                new LeanException(LeanException.Error.OpenIdAuthFailed)));
         return;
     }
 
@@ -34,7 +34,8 @@
     String code = request.getParameter("code");
     if (error != null) {
         // oauth error - redirect back to client with error
-        response.sendRedirect(scheme.getErrorUrl(2, "Facebook OAuth error: "+error));
+        response.sendRedirect(scheme.getErrorUrl(
+                new LeanException(LeanException.Error.FacebookAuthError, "OAuth error: " + error)));
 
     } else if (code != null) {
 
@@ -51,11 +52,11 @@
             response.sendRedirect(scheme.getUrl(lean_token.token, redirectUrl));
 
         } catch (LeanException le) {
-            response.sendRedirect(scheme.getErrorUrl(le.getErrorCode(), le.getMessage()));
+            response.sendRedirect(scheme.getErrorUrl(le));
         }
     } else {
         // error: this should not happen - redirect back to client with error
-        response.sendRedirect(scheme.getErrorUrl(3, "Facebook OAuth error: required parameters missing."));
+        response.sendRedirect(scheme.getErrorUrl(new LeanException(LeanException.Error.FacebookAuthMissingParam)));
 
     }
 

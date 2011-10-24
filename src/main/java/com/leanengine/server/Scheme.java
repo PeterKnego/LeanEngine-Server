@@ -6,7 +6,7 @@ public interface Scheme {
 
     String getUrl(String authToken, String redirectUrl);
 
-    String getErrorUrl(int errorCode, String errorMsg);
+    String getErrorUrl(LeanException exception);
 
-    String getErrorUrl(int errorCode, String errorMsg, String redirectUrl);
+    String getErrorUrl(LeanException exception, String redirectUrl);
 }

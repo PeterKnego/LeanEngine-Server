@@ -3,7 +3,7 @@ package com.leanengine.server;
 public class LeanException extends Throwable {
 
     public enum Error {
-        // inout errors have codes above 100
+        // input errors have codes above 100
         // they happen when client sends wrong requests
         IllegalEntityName(101, "Illegal LeanEntity name."),
         EmptyEntity(102, "LeanEntity contains no properties."),
@@ -13,14 +13,20 @@ public class LeanException extends Throwable {
 
         // server errors have codes below 100
         // they happen when server has problems fulfilling request
-        FacebookAuthError(12, "Facebook authorization error."),
-        FacebookAuthParseError(13, "Facebook authorization error."),
-        FacebookAuthConnectError(14, "Could not connect to Facebook authorization server."),
+        FacebookAuthError(1, "Facebook authorization error."),
+        FacebookAuthParseError(2, "Facebook authorization error."),
+        FacebookAuthConnectError(3, "Could not connect to Facebook authorization server."),
         FacebookAuthResponseError(4, "Facebook OAuth server error."),
-        FacebookAuthMissingParamError(5, "OAuth error: missing parameters in server reply."),
-        FacebookAuthNoConnectionError(8, "Could not connect to Facebook authorization server."),
-        ScriptExecutionError(15, "Error executing script: "),
-        ScriptOutputError(16, "Illegal result error: custom scripts must produce a Javascript object. Script: ");
+        FacebookAuthMissingParam(5, "OAuth error: missing parameters in server reply."),
+        FacebookAuthNoConnection(6, "Could not connect to Facebook authorization server."),
+        FacebookAuthNotEnabled(7, "Server configuration error: Facebook login not enabled."),
+        FacebookAuthMissingAppId(8, "Server configuration error: missing Facebook Application ID."),
+        FacebookAuthMissingAppSecret(9, "Server configuration error: missing Facebook Application Secret."),
+        FacebookAuthMissingCRSF(10, "Facebook OAuth request missing CSRF protection code."),
+        OpenIdAuthFailed(11, "OpenID authentication failed."),
+        OpenIdAuthNotEnabled(12, "Server configuration error: OpenID login not enabled."),
+        ScriptExecutionError(20, "Error executing script: "),
+        ScriptOutputError(21, "Illegal script result error: custom scripts must produce a Javascript object. Script: ");
 
         public int errorCode;
         public String errorMessage;
