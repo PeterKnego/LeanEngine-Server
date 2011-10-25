@@ -97,7 +97,7 @@
                     </th>
                 </tr>
                 <%
-                    List<Entity> entities = DatastoreUtils.getPrivateEntities();
+                    List<Entity> entities = DatastoreUtils.getPrivateEntities(null);
 
                     // protection - does nothing just prevents NPE
                     if (entities == null) entities = new ArrayList<Entity>();
@@ -112,7 +112,7 @@
                         }
                 %>
                 <tr>
-                    <td><%=entity.getProperty("_entity")%>
+                    <td><%=entity.getProperty("_kind")%>
                     </td>
                     <td><%=props.toString()%>
                     </td>

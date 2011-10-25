@@ -1,6 +1,5 @@
 package com.leanengine.server.rpc.rest;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.appengine.DatastoreUtils;
 import org.codehaus.jackson.JsonNode;
@@ -24,10 +23,17 @@ public class EntityRest {
     }
 
     @GET
+    @Path("/{entityName}")
+    @Produces("application/json")
+    public String getAllUserPrivateEntities(@PathParam("entityName")String kind) throws LeanException {
+        return DatastoreUtils.getPrivateEntitiesAsJSON(kind);
+    }
+
+    @GET
     @Path("/")
     @Produces("application/json")
     public String getAllUserPrivateEntities() throws LeanException {
-        return DatastoreUtils.getPrivateEntitiesAsJSON();
+        return DatastoreUtils.getPrivateEntitiesAsJSON(null);
     }
 
     @POST

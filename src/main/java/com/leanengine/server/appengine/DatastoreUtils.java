@@ -131,7 +131,7 @@ public class DatastoreUtils {
         JSONObject json = new JSONObject();
         try {
             json.put("_id", entity.getKey().getId());
-            json.put("_entity", entity.getProperty("_entity"));
+            json.put("_kind", entity.getProperty("_kind"));
             json.put("_account", entity.getProperty("_account"));
             Map<String, Object> props = entity.getProperties();
             for (Map.Entry<String, Object> prop : props.entrySet()) {
@@ -173,16 +173,19 @@ public class DatastoreUtils {
         return json;
     }
 
-    public static String getPrivateEntitiesAsJSON() throws LeanException {
-        return toJson(getPrivateEntities()).toString();
+    public static String getPrivateEntitiesAsJSON(String kind) throws LeanException {
+        return toJson(getPrivateEntities(kind)).toString();
     }
 
-    public static List<Entity> getPrivateEntities() {
+    public static List<Entity> getPrivateEntities(String kind) {
         LeanAccount account = AuthService.getCurrentAccount();
         // this should not happen, but we check anyway
         if (account == null) return null;
 
         Query query = new Query("lean_entity");
+        if (kind != null) {
+            query.addFilter("_kind", Query.FilterOperator.EQUAL, kind);
+        }
         query.addFilter("_account", Query.FilterOperator.EQUAL, account.id);
         PreparedQuery pq = datastore.prepare(query);
 
@@ -197,7 +200,7 @@ public class DatastoreUtils {
 
         Entity entityEntity = new Entity("lean_entity");
         entityEntity.setProperty("_account", AuthService.getCurrentAccount().id);
-        entityEntity.setProperty("_entity", entityName);
+        entityEntity.setProperty("_kind", entityName);
 
         if (properties != null) {
             for (Map.Entry<String, Object> entry : properties.entrySet()) {
