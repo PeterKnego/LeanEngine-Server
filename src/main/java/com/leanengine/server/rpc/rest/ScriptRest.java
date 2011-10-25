@@ -10,7 +10,7 @@ import javax.ws.rs.*;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@Path("/script")
+@Path("/v1/script")
 @Produces("application/json")
 @Consumes("application/json")
 public class ScriptRest {

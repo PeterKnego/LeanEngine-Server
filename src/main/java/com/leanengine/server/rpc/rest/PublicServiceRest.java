@@ -7,7 +7,7 @@ import com.leanengine.server.LeanAccount;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("/public")
+@Path("/v1/public")
 public class PublicServiceRest {
 
     private static PublicServiceRest instance;

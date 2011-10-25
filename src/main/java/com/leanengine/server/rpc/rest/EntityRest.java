@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@Path("/entity")
+@Path("/v1/entity")
 public class EntityRest {
 
     private static final Logger log = Logger.getLogger(EntityRest.class.getName());
