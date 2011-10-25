@@ -9,6 +9,30 @@ import java.io.*;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
+/**
+ * This a straightforward request and reply, header & body dump filter. Usable when trableshooting.
+ * Just enable it in web.xml with {@code<filter>}, {@code<filter-mapping>} and {@code<init-param>}:<br/><br/>
+ * {@code<filter>}<br/>
+ * {@code     <filter-name>DumpFilter</filter-name>}<br/>
+ * {@code     <filter-class>com.leanengine.server.DumpFilter</filter-class>}<br/>
+ * {@code         <init-param>}<br/>
+ * {@code               <param-name>dumpRequest</param-name>}<br/>
+ * {@code             <param-value>true</param-value>}<br/>
+ * {@code         </init-param>}<br/>
+ * {@code         <init-param>}<br/>
+ * {@code             <param-name>dumpResponse</param-name>}<br/>
+ * {@code             <param-value>true</param-value>}<br/>
+ * {@code         </init-param>}<br/>
+ * {@code         <init-param>}<br/>
+ * {@code             <param-name>dumpHeader</param-name>}<br/>
+ * {@code             <param-value>true</param-value>}<br/>
+ * {@code         </init-param>}<br/>
+ * {@code     </filter>}<br/>
+ * {@code     <filter-mapping>}<br/>
+ * {@code         <filter-name>DumpFilter</filter-name>}<br/>
+ * {@code         <url-pattern>/some/url/*</url-pattern>}<br/>
+ * {@code     </filter-mapping>}<br/>
+ */
 public class DumpFilter implements Filter {
 
     private static final Logger log = Logger.getLogger(DumpFilter.class.getName());
