@@ -1,8 +1,8 @@
-package com.leanengine.server.rpc.rest;
+package com.leanengine.server.rest;
 
 import com.google.appengine.api.users.UserServiceFactory;
-import com.leanengine.server.AuthService;
-import com.leanengine.server.LeanAccount;
+import com.leanengine.server.auth.AuthService;
+import com.leanengine.server.auth.LeanAccount;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

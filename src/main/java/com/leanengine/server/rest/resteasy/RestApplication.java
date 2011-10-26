@@ -1,6 +1,6 @@
-package com.leanengine.server.rpc.rest.resteasy;
+package com.leanengine.server.rest.resteasy;
 
-import com.leanengine.server.rpc.rest.*;
+import com.leanengine.server.rest.*;
 
 import javax.ws.rs.core.Application;
 import java.util.HashSet;

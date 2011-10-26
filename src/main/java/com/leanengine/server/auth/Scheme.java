@@ -1,4 +1,6 @@
-package com.leanengine.server;
+package com.leanengine.server.auth;
+
+import com.leanengine.server.LeanException;
 
 public interface Scheme {
 

@@ -1,4 +1,5 @@
 <%@ page import="com.leanengine.server.*" %>
+<%@ page import="com.leanengine.server.auth.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%

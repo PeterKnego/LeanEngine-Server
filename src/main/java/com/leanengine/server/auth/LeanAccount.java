@@ -1,4 +1,4 @@
-package com.leanengine.server;
+package com.leanengine.server.auth;
 
 import com.google.appengine.api.datastore.Key;
 

@@ -1,12 +1,12 @@
 package com.leanengine.server;
 
-import com.google.appengine.api.users.UserServiceFactory;
+import com.leanengine.server.auth.AuthService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class RestSecurityFilter implements Filter {
+public class SecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

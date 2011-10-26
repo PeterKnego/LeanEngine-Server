@@ -1,5 +1,8 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="com.leanengine.server.*" %>
+<%@ page import="com.leanengine.server.auth.Scheme" %>
+<%@ page import="com.leanengine.server.auth.WebScheme" %>
+<%@ page import="com.leanengine.server.auth.MobileScheme" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String type = request.getParameter("type") == null ? "web" : request.getParameter("type");

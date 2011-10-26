@@ -1,4 +1,4 @@
-package com.leanengine.server;
+package com.leanengine.server.auth;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

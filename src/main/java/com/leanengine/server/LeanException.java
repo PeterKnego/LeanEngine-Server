@@ -9,7 +9,10 @@ public class LeanException extends Throwable {
         EmptyEntity(102, "LeanEntity contains no properties."),
         IllegalEntityFormat(103, "Illegal LeanEntity format."),
         EntityNotFound(104, "Entity not found."),
-        EntityToJSON(105, "Entity missing "),
+        EntityToJSON(105, "Entity missing."),
+        QueryJSON(105, "Query JSON could not be parsed."),
+        UnsupportedQueryFilterOperation(106, "Query contains unsupported filter operation: "),
+        UnsupportedQuerySortOperation(107, "Query contains unsupported sort operation: "),
 
         // server errors have codes below 100
         // they happen when server has problems fulfilling request
@@ -26,7 +29,8 @@ public class LeanException extends Throwable {
         OpenIdAuthFailed(11, "OpenID authentication failed."),
         OpenIdAuthNotEnabled(12, "Server configuration error: OpenID login not enabled."),
         ScriptExecutionError(20, "Error executing script: "),
-        ScriptOutputError(21, "Illegal script result error: custom scripts must produce a Javascript object. Script: ");
+        ScriptOutputError(21, "Illegal script result error: custom scripts must produce a Javascript object. Script: "),
+        NotAuthorized(40, "No account active or account not authorized to access this resource.");
 
         public int errorCode;
         public String errorMessage;

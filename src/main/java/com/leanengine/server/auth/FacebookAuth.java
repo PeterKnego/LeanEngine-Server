@@ -1,8 +1,10 @@
-package com.leanengine.server;
+package com.leanengine.server.auth;
 
 import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
+import com.leanengine.server.LeanEngineSettings;
+import com.leanengine.server.LeanException;
 import com.leanengine.server.appengine.DatastoreUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
@@ -29,7 +31,8 @@ public class FacebookAuth {
         return "https://m.facebook.com/dialog/oauth?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
                 "redirect_uri=" + redirectUrl + "&" +
-                "scope=email&" +
+                "scope=offline_access&" +
+                "response_type=code&" +
                 "state=" + state;
     }
 
@@ -42,7 +45,8 @@ public class FacebookAuth {
         return "https://www.facebook.com/dialog/oauth?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
                 "redirect_uri=" + redirectUrl + "&" +
-                "scope=email&" +
+                "scope=offline_access&" +
+                "response_type=code&" +
                 "state=" + state;
     }
 
@@ -62,7 +66,7 @@ public class FacebookAuth {
                 "code=" + code;
     }
 
-    public static JsonNode getUserData(String access_token) throws LeanException {
+    public static JsonNode fetchUserDataFromFacebook(String access_token) throws LeanException {
         String url = "https://graph.facebook.com/me?access_token=" + access_token;
         URLFetchService fetchService = URLFetchServiceFactory.getURLFetchService();
         HTTPResponse fetchResponse;
@@ -100,9 +104,11 @@ public class FacebookAuth {
             String fbAccessToken = null, expires = null;
             String[] splitResponse = responseContent.split("&");
 
-            if (splitResponse.length != 2) {
+            if (splitResponse.length != 1) {
                 // error: facebook should return two arguments: access_token & expires
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParam);
+                throw new LeanException(LeanException.Error.FacebookAuthMissingParam,
+                        "Facebook response should contain only one parameter, \n" +
+                                "Response content: \n" + responseContent);
             }
             for (String split : splitResponse) {
                 String[] parts = split.split("=");
@@ -112,18 +118,19 @@ public class FacebookAuth {
             }
 
             // check if we got required parameters
-            if (fbAccessToken == null || expires == null) {
-                //error: wrong parameters: facebook should return 'access_token' and 'expires' parameters
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParam);
+            if (fbAccessToken == null) {
+                //error: wrong parameters: facebook should return 'access_token' parameter
+                throw new LeanException(LeanException.Error.FacebookAuthMissingParam, " 'access_token' not available.");
             }
 
             // All is good - check the user
-            JsonNode userData = FacebookAuth.getUserData(fbAccessToken);
+            JsonNode userData = FacebookAuth.fetchUserDataFromFacebook(fbAccessToken);
             String providerID = userData.get("id").getTextValue();
 
             if (providerID == null || providerID.length() == 0) {
-                //Facebook returned user data, but email field is missing
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParam);
+                //Facebook returned user data but ID field is missing
+                throw new LeanException(LeanException.Error.FacebookAuthMissingParam,
+                        " Missing ID field in user data. Content: " + responseContent);
             }
 
             LeanAccount account = DatastoreUtils.findAccountByProvider(providerID, "fb-oauth");

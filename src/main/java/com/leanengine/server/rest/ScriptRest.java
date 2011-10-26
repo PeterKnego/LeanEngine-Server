@@ -1,4 +1,4 @@
-package com.leanengine.server.rpc.rest;
+package com.leanengine.server.rest;
 
 import com.leanengine.server.LeanException;
 import org.json.JSONArray;

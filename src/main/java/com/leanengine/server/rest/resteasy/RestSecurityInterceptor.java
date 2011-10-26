@@ -1,7 +1,7 @@
-package com.leanengine.server.rpc.rest.resteasy;
+package com.leanengine.server.rest.resteasy;
 
-import com.leanengine.server.AuthService;
-import com.leanengine.server.rpc.rest.PublicServiceRest;
+import com.leanengine.server.auth.AuthService;
+import com.leanengine.server.rest.PublicServiceRest;
 import org.jboss.resteasy.annotations.interception.ServerInterceptor;
 import org.jboss.resteasy.core.Headers;
 import org.jboss.resteasy.core.ResourceMethod;

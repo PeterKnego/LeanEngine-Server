@@ -4,6 +4,7 @@
 <%@ page import="com.leanengine.server.appengine.DatastoreUtils" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="com.leanengine.server.auth.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String type = request.getParameter("type") == null ? "web" : request.getParameter("type");

@@ -1,5 +1,9 @@
 <%@ page import="com.leanengine.server.*" %>
 <%@ page import="java.util.UUID" %>
+<%@ page import="com.leanengine.server.auth.Scheme" %>
+<%@ page import="com.leanengine.server.auth.WebScheme" %>
+<%@ page import="com.leanengine.server.auth.MobileScheme" %>
+<%@ page import="com.leanengine.server.auth.FacebookAuth" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%

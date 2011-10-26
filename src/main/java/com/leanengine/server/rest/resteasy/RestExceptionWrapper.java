@@ -1,4 +1,4 @@
-package com.leanengine.server.rpc.rest.resteasy;
+package com.leanengine.server.rest.resteasy;
 
 import com.leanengine.server.LeanException;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

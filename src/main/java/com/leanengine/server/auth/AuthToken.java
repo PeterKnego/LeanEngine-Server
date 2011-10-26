@@ -1,4 +1,4 @@
-package com.leanengine.server;
+package com.leanengine.server.auth;
 
 import java.util.UUID;
 

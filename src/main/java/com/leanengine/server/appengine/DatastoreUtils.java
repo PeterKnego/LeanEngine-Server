@@ -1,14 +1,22 @@
 package com.leanengine.server.appengine;
 
 import com.google.appengine.api.datastore.*;
-import com.leanengine.server.AuthService;
-import com.leanengine.server.AuthToken;
-import com.leanengine.server.LeanAccount;
 import com.leanengine.server.LeanException;
+import com.leanengine.server.auth.AuthService;
+import com.leanengine.server.auth.AuthToken;
+import com.leanengine.server.auth.LeanAccount;
+import com.leanengine.server.entity.LeanQuery;
+import com.leanengine.server.entity.QueryFilter;
+import com.leanengine.server.entity.QuerySort;
+import com.leanengine.server.rest.ResultList;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -177,10 +185,10 @@ public class DatastoreUtils {
         return toJson(getPrivateEntities(kind)).toString();
     }
 
-    public static List<Entity> getPrivateEntities(String kind) {
+    public static List<Entity> getPrivateEntities(String kind) throws LeanException {
         LeanAccount account = AuthService.getCurrentAccount();
         // this should not happen, but we check anyway
-        if (account == null) return null;
+        if (account == null) throw new LeanException(LeanException.Error.NotAuthorized);
 
         Query query = new Query("lean_entity");
         if (kind != null) {
@@ -212,4 +220,33 @@ public class DatastoreUtils {
         return "{\"id\":" + result.getId() + "}";
     }
 
+    public static ResultList<Entity> queryEntityPrivate(LeanQuery leanQuery) throws LeanException {
+        LeanAccount account = AuthService.getCurrentAccount();
+        // this should not happen, but we check anyway
+        if (account == null) throw new LeanException(LeanException.Error.NotAuthorized);
+
+        Query query = new Query("lean_entity");
+        query.addFilter("_kind", Query.FilterOperator.EQUAL, leanQuery.getKind());
+        query.addFilter("_account", Query.FilterOperator.EQUAL, account.id);
+
+        for (QueryFilter queryFilter : leanQuery.getFilters()) {
+            query.addFilter(
+                    queryFilter.getProperty(),
+                    queryFilter.getOperator().getFilterOperator(),
+                    queryFilter.getValue());
+        }
+
+        for (QuerySort querySort : leanQuery.getSorts()) {
+            query.addSort(querySort.getProperty(), querySort.getDirection().getSortDirection());
+        }
+
+        PreparedQuery pq = datastore.prepare(query);
+
+        return new ResultList<Entity>(pq.asList(FetchOptions.Builder.withDefaults()));
+    }
+
+    private String queryResultAsJson(ResultList<Entity> resultList) throws IOException {
+        ObjectMapper mapper = ServerUtils.getObjectMapper();
+        return mapper.writeValueAsString(resultList);
+    }
 }

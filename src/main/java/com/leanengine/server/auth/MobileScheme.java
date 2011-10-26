@@ -1,9 +1,14 @@
-package com.leanengine.server;
+package com.leanengine.server.auth;
+
+import com.leanengine.server.LeanException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.logging.Logger;
 
 public class MobileScheme implements Scheme {
+
+    private static final Logger log = Logger.getLogger(MobileScheme.class.getName());
 
     private String scheme = "leanengine://";
     private String hostname;
@@ -29,6 +34,9 @@ public class MobileScheme implements Scheme {
 
     @Override
     public String getErrorUrl(LeanException exception, String redirectUrl) {
+
+        log.severe(exception.getMessage());
+
         try {
             return scheme + hostname + "/?errorcode=" + exception.getErrorCode() +
                     "&errormsg=" + URLEncoder.encode(exception.getMessage(), "UTF-8");

@@ -1,5 +1,5 @@
-<%@ page import="com.leanengine.server.AuthService" %>
-<%@ page import="com.leanengine.server.LeanAccount" %>
+<%@ page import="com.leanengine.server.auth.AuthService" %>
+<%@ page import="com.leanengine.server.auth.LeanAccount" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String token = (String) session.getAttribute("lean_token");
