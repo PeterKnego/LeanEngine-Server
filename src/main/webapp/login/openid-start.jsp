@@ -1,8 +1,9 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
-<%@ page import="com.leanengine.server.*" %>
+<%@ page import="com.leanengine.server.LeanEngineSettings" %>
+<%@ page import="com.leanengine.server.LeanException" %>
+<%@ page import="com.leanengine.server.auth.MobileScheme" %>
 <%@ page import="com.leanengine.server.auth.Scheme" %>
 <%@ page import="com.leanengine.server.auth.WebScheme" %>
-<%@ page import="com.leanengine.server.auth.MobileScheme" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String type = request.getParameter("type") == null ? "web" : request.getParameter("type");
@@ -36,9 +37,15 @@
     // redirectUrl is composed so that it redirects twice:
     // first to /login/openid-auth.jsp for authentication
     // second to the final destination URL
-    String redirectUrl = request.getParameter("redirect") == null ?
-            "/login/openid-auth.jsp?&next=/login/logindone.jsp&type=" + type :
-            "/login/openid-auth.jsp?next=" + request.getParameter("redirect") + "&type=" + type;
+    String redirectUrl;
+    if (type.equals("mobile")) {
+        redirectUrl = "/login/openid-auth.jsp?next=@mobile";
+    } else {
+        redirectUrl = request.getParameter("redirect") == null ?
+                "/login/openid-auth.jsp?next=/login/logindone.jsp" :
+                "/login/openid-auth.jsp?next=" + request.getParameter("redirect");
+    }
+
 
     String loginUrl = UserServiceFactory.getUserService().createLoginURL(redirectUrl, null, openIdProvider, null);
 

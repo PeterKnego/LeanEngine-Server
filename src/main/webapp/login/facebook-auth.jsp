@@ -11,7 +11,7 @@
     String state = request.getParameter("state");
     if (state == null || !state.equals(session.getAttribute("antiCSRF"))) {
         // oauth error - redirect back to client with error
-        response.sendRedirect(new WebScheme(request.getScheme(), request.getScheme()).getErrorUrl(
+        response.sendRedirect(new WebScheme(request.getScheme(), request.getServerName()).getErrorUrl(
                 new LeanException(LeanException.Error.OpenIdAuthFailed)));
         return;
     }

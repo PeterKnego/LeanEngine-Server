@@ -31,6 +31,7 @@ public class FacebookAuth {
         return "https://m.facebook.com/dialog/oauth?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
                 "redirect_uri=" + redirectUrl + "&" +
+                "display=touch&" +
                 "scope=offline_access&" +
                 "response_type=code&" +
                 "state=" + state;

@@ -7,11 +7,11 @@
 <%@ page import="com.leanengine.server.auth.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String type = request.getParameter("type") == null ? "web" : request.getParameter("type");
+    String nextUrl = request.getParameter("next") == null ? "": request.getParameter("next");
 
     // type parameters tells us the type of redirect we should perform
     Scheme scheme;
-    if (type.equals("mobile")) {
+    if (nextUrl.equals("@mobile")) {
         scheme = new MobileScheme(request.getServerName());
     } else {
         String hostname = request.getServerName();
@@ -21,7 +21,6 @@
         scheme = new WebScheme(request.getScheme(), hostname);
     }
 
-    String nextUrl = request.getParameter("next");
 
     // get user
     User currentUser = UserServiceFactory.getUserService().getCurrentUser();
