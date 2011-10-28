@@ -1,11 +1,11 @@
 package com.leanengine.server.rest;
 
+import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.mozilla.javascript.*;
-
 import javax.ws.rs.*;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -23,7 +23,7 @@ public class ScriptRest {
     public String scriptPOST(@PathParam("scriptName") String scriptName, String code) throws LeanException {
 
         //todo resolve Script name
-        
+
         Context ctx = Context.enter();
         try {
             ScriptableObject scope = ctx.initStandardObjects();
@@ -39,8 +39,6 @@ public class ScriptRest {
             return toJSON((NativeObject) result).toString();
         } catch (RhinoException ex) {
             throw new LeanException(LeanException.Error.ScriptExecutionError, scriptName, ex);
-        } catch (JSONException e) {
-            throw new LeanException(LeanException.Error.ScriptOutputError, scriptName);
         } finally {
             Context.exit();
         }
@@ -52,17 +50,17 @@ public class ScriptRest {
         return jsonObject;
     }
 
-    private JSONObject toJSON(NativeObject object) throws JSONException {
+    private JsonNode toJSON(NativeObject object) {
         if (object == null) return null;
 
-        JSONObject result = new JSONObject();
+        ObjectNode result = JsonUtils.getObjectMapper().createObjectNode();
         for (Map.Entry<Object, Object> entry : object.entrySet()) {
             if (entry.getValue().getClass().equals(NativeObject.class)) {
                 result.put((String) entry.getKey(), toJSON((NativeObject) entry.getValue()));
             } else if (entry.getValue().getClass().equals(NativeArray.class)) {
                 result.put((String) entry.getKey(), toJSON((NativeArray) entry.getValue()));
             } else {
-                result.put((String) entry.getKey(), entry.getValue());
+                result.putPOJO((String) entry.getKey(), entry.getValue());
             }
 
         }
@@ -70,13 +68,13 @@ public class ScriptRest {
         return result;
     }
 
-    private JSONArray toJSON(NativeArray array) throws JSONException {
-        JSONArray result = new JSONArray();
+    private ArrayNode toJSON(NativeArray array) {
+        ArrayNode result = JsonUtils.getObjectMapper().createArrayNode();
         for (Object o : array) {
             if (o.getClass().equals(NativeObject.class)) {
-                result.put(toJSON((NativeObject) o));
+                result.add(toJSON((NativeObject) o));
             } else {
-                result.put(o);
+                result.addPOJO(o);
             }
         }
         return result;

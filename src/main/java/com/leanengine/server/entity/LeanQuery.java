@@ -1,18 +1,12 @@
 package com.leanengine.server.entity;
 
+import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
-import com.leanengine.server.appengine.ServerUtils;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +50,7 @@ public class LeanQuery {
     }
 
     public String toJSON() throws LeanException {
-       ObjectMapper mapper = ServerUtils.getObjectMapper();
+        ObjectMapper mapper = JsonUtils.getObjectMapper();
         try {
             return mapper.writeValueAsString(this);
         } catch (IOException e) {
@@ -65,7 +59,7 @@ public class LeanQuery {
     }
 
     public static LeanQuery parseJSON(String json) throws LeanException {
-        ObjectMapper mapper = ServerUtils.getObjectMapper();
+        ObjectMapper mapper = JsonUtils.getObjectMapper();
         try {
             return mapper.readValue(json, LeanQuery.class);
         } catch (IOException e) {

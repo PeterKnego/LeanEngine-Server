@@ -1,6 +1,7 @@
 package com.leanengine.server.appengine;
 
 import com.google.appengine.api.datastore.*;
+import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.auth.AuthService;
 import com.leanengine.server.auth.AuthToken;
@@ -8,15 +9,7 @@ import com.leanengine.server.auth.LeanAccount;
 import com.leanengine.server.entity.LeanQuery;
 import com.leanengine.server.entity.QueryFilter;
 import com.leanengine.server.entity.QuerySort;
-import com.leanengine.server.rest.ResultList;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -117,40 +110,19 @@ public class DatastoreUtils {
         leanAccount.id = accountKey.getId();
     }
 
-    public static String getPrivateEntity(String kind, String entityId) throws LeanException {
+    public static Entity getPrivateEntity(String kind, String entityId) throws LeanException {
         LeanAccount account = AuthService.getCurrentAccount();
         // this should not happen, but we check anyway
         if (account == null) return null;
 
         if (entityId == null || kind == null) return null;
-        Entity entity = null;
+        Entity entity;
         try {
             entity = datastore.get(KeyFactory.createKey(kind, entityId));
         } catch (EntityNotFoundException e) {
             throw new LeanException(LeanException.Error.EntityNotFound);
         }
-
-        JSONObject json = entityToJson(entity);
-
-        return json.toString();
-    }
-
-    private static JSONObject entityToJson(Entity entity) throws LeanException {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("_id", entity.getKey().getId());
-            json.put("_kind", entity.getProperty("_kind"));
-            json.put("_account", entity.getProperty("_account"));
-            Map<String, Object> props = entity.getProperties();
-            for (Map.Entry<String, Object> prop : props.entrySet()) {
-                // todo handle proper typing of properties
-                json.put(prop.getKey(), prop.getValue());
-            }
-        } catch (JSONException je) {
-            throw new LeanException(LeanException.Error.EntityToJSON, je);
-        }
-
-        return json;
+        return entity;
     }
 
     private static LeanAccount toLeanAccount(Entity entity) {
@@ -163,26 +135,6 @@ public class DatastoreUtils {
         );
 
         return account;
-    }
-
-    private static JSONObject toJson(List<Entity> entityList) throws LeanException {
-        JSONObject json = new JSONObject();
-        JSONArray array = new JSONArray();
-
-        for (Entity entity : entityList) {
-            array.put(entityToJson(entity));
-        }
-
-        try {
-            json.put("list", array);
-        } catch (JSONException e) {
-            throw new LeanException(LeanException.Error.EntityToJSON, e);
-        }
-        return json;
-    }
-
-    public static String getPrivateEntitiesAsJSON(String kind) throws LeanException {
-        return toJson(getPrivateEntities(kind)).toString();
     }
 
     public static List<Entity> getPrivateEntities(String kind) throws LeanException {
@@ -200,7 +152,7 @@ public class DatastoreUtils {
         return pq.asList(FetchOptions.Builder.withDefaults());
     }
 
-    public static String putPrivateEntity(String entityName, Map<String, Object> properties) throws LeanException {
+    public static long putPrivateEntity(String entityName, Map<String, Object> properties) throws LeanException {
 
         if (!pattern.matcher(entityName).matches()) {
             throw new LeanException(LeanException.Error.IllegalEntityName);
@@ -216,11 +168,10 @@ public class DatastoreUtils {
             }
         }
         Key result = datastore.put(entityEntity);
-
-        return "{\"id\":" + result.getId() + "}";
+        return result.getId();
     }
 
-    public static ResultList<Entity> queryEntityPrivate(LeanQuery leanQuery) throws LeanException {
+    public static List<Entity> queryEntityPrivate(LeanQuery leanQuery) throws LeanException {
         LeanAccount account = AuthService.getCurrentAccount();
         // this should not happen, but we check anyway
         if (account == null) throw new LeanException(LeanException.Error.NotAuthorized);
@@ -242,11 +193,7 @@ public class DatastoreUtils {
 
         PreparedQuery pq = datastore.prepare(query);
 
-        return new ResultList<Entity>(pq.asList(FetchOptions.Builder.withDefaults()));
+        return pq.asList(FetchOptions.Builder.withDefaults());
     }
 
-    private String queryResultAsJson(ResultList<Entity> resultList) throws IOException {
-        ObjectMapper mapper = ServerUtils.getObjectMapper();
-        return mapper.writeValueAsString(resultList);
-    }
 }

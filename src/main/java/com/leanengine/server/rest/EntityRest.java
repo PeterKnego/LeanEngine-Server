@@ -1,17 +1,18 @@
 package com.leanengine.server.rest;
 
 import com.google.appengine.api.datastore.Entity;
+import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.entity.LeanQuery;
 import com.leanengine.server.appengine.DatastoreUtils;
 import com.leanengine.server.entity.QueryFilter;
 import com.leanengine.server.entity.QuerySort;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.type.TypeReference;
 
 import javax.ws.rs.*;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -24,32 +25,37 @@ public class EntityRest {
 
     @GET
     @Path("/{entityName}/{entityId}")
-    public String getEntity(@PathParam("entityName") String entityName, @PathParam("entityId") String entityId) throws LeanException {
-        return DatastoreUtils.getPrivateEntity(entityName, entityId);
+    public JsonNode getEntity(@PathParam("entityName") String entityName, @PathParam("entityId") String entityId) throws LeanException {
+        Entity entity = DatastoreUtils.getPrivateEntity(entityName, entityId);
+        return JsonUtils.entityToJson(entity);
     }
 
     @GET
     @Path("/{entityName}")
-    public String getAllUserPrivateEntities(@PathParam("entityName") String kind) throws LeanException {
-        return DatastoreUtils.getPrivateEntitiesAsJSON(kind);
+    public JsonNode getAllUserPrivateEntities(@PathParam("entityName") String kind) throws LeanException {
+        List<Entity> entities = DatastoreUtils.getPrivateEntities(kind);
+        return JsonUtils.entityListToJson(entities);
     }
 
     @GET
     @Path("/")
-    public String getAllUserPrivateEntities() throws LeanException {
-        return DatastoreUtils.getPrivateEntitiesAsJSON(null);
+    public JsonNode getAllUserPrivateEntities() throws LeanException {
+        List<Entity> entities = DatastoreUtils.getPrivateEntities(null);
+        return JsonUtils.entityListToJson(entities);
     }
 
     @POST
     @Path("/{entityName}")
     public String putEntity(@PathParam("entityName") String entityName, JsonNode entityJson) throws LeanException {
-        return DatastoreUtils.putPrivateEntity(entityName, getEntityProperties(entityJson));
+        long entityID = DatastoreUtils.putPrivateEntity(entityName, getEntityProperties(entityJson));
+        return "{\"id\":" + entityID + "}";
     }
 
     @POST
     @Path("/query")
-    public ResultList<Entity> query(String queryJson) throws LeanException {
-        return DatastoreUtils.queryEntityPrivate(LeanQuery.parseJSON(queryJson));
+    public JsonNode query(String queryJson) throws LeanException {
+        List<Entity> result = DatastoreUtils.queryEntityPrivate(LeanQuery.parseJSON(queryJson));
+        return JsonUtils.entityListToJson(result);
     }
 
     @GET
