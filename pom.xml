@@ -124,9 +124,9 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id/>
                         <phase>validate</phase>
                         <goals>
+                            <!--suppress MavenModelInspection -->
                             <goal>unpack</goal>
                         </goals>
                     </execution>
