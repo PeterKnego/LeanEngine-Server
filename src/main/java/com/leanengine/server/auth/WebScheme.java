@@ -27,7 +27,7 @@ public class WebScheme implements Scheme {
     public String getUrl(String authToken, String redirectUrl) {
         // if null set default value
         redirectUrl = redirectUrl == null ? "/login/logindone.jsp" : redirectUrl;
-        return scheme + hostname + redirectUrl + "?auth_token=" + authToken;
+        return scheme + hostname + redirectUrl;
     }
 
     @Override
