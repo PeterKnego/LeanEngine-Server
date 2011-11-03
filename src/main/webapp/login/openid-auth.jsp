@@ -5,6 +5,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.leanengine.server.auth.*" %>
+<%@ page import="com.leanengine.server.appengine.AccountUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String nextUrl = request.getParameter("next") == null ? "": request.getParameter("next");
@@ -32,12 +33,11 @@
     // get toke for this user
     AuthToken authToken;
 
-    LeanAccount account = DatastoreUtils.findAccountByProvider(currentUser.getUserId(),
+    LeanAccount account = AccountUtils.findAccountByProvider(currentUser.getUserId(),
             currentUser.getFederatedIdentity());
 
     if (account == null) {
-        //todo this is one-to-one mapping between Account and User
-        //change this in the future
+        //todo this is one-to-one mapping between Account and User - change this in the future
 
         Map<String, Object> props = new HashMap<String, Object>();
         props.put("email", currentUser.getEmail());
@@ -52,7 +52,7 @@
         );
 
         // saving the LeanAccount sets the 'id' on it
-        DatastoreUtils.saveAccount(account);
+        AccountUtils.saveAccount(account);
     }
 
     // create our own authentication token
@@ -62,5 +62,5 @@
     session.setAttribute("lean_token", authToken.token);
 
     //send lean_token back to browser
-    response.sendRedirect(scheme.getUrl(authToken.token, nextUrl));       // todo null
+    response.sendRedirect(scheme.getUrl(authToken.token, nextUrl));
 %>

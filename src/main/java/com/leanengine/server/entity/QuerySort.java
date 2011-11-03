@@ -2,18 +2,12 @@ package com.leanengine.server.entity;
 
 import com.google.appengine.api.datastore.Query;
 import com.leanengine.server.LeanException;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonValue;
 
 public class QuerySort {
     private String property;
     private SortDirection direction;
 
-    @JsonCreator
-    public QuerySort(
-            @JsonProperty("property") String property,
-            @JsonProperty("direction") SortDirection direction) {
+    public QuerySort(String property, SortDirection direction) {
         this.property = property;
         this.direction = direction;
     }
@@ -38,7 +32,6 @@ public class QuerySort {
             this.sortDirection = sortDirection;
         }
 
-        @JsonCreator
         public static SortDirection create(String sortJson) throws LeanException {
             if ("asc".equals(sortJson)) {
                 return SortDirection.ASCENDING;
@@ -52,7 +45,6 @@ public class QuerySort {
             return sortDirection;
         }
 
-        @JsonValue
         public String toJSON() {
             return sortString;
         }

@@ -12,6 +12,7 @@
     <admin-console>
         <page name="LeanEngine Settings" url="/admin/settings.jsp"/>
         <page name="LeanEngine Scripts" url="/admin/scripts.jsp"/>
+        <page name="Test Runner" url="/admin/testrunner.jsp"/>
     </admin-console>
 
 </appengine-web-app>

@@ -13,6 +13,7 @@ public class LeanException extends Throwable {
         QueryJSON(105, "Query JSON could not be parsed."),
         UnsupportedQueryFilterOperation(106, "Query contains unsupported filter operation: "),
         UnsupportedQuerySortOperation(107, "Query contains unsupported sort operation: "),
+        ValueToJSON(108, "Value node could not be converted to a supported type."),
 
         // server errors have codes below 100
         // they happen when server has problems fulfilling request

@@ -18,17 +18,6 @@ public class QueryFilter {
         this.value = value;
     }
 
-    @JsonCreator
-    public QueryFilter(
-            @JsonProperty("property") String property,
-            @JsonProperty("operator") String operator,
-            @JsonProperty("value") Object value) throws LeanException {
-
-        this.property = property;
-        this.operator = FilterOperator.creator(operator);
-        this.value = value;
-    }
-
     public String getProperty() {
         return property;
     }
@@ -82,7 +71,6 @@ public class QueryFilter {
             return gaeOperator;
         }
 
-        @JsonValue
         public String toJSON() {
             return operatorString;
         }

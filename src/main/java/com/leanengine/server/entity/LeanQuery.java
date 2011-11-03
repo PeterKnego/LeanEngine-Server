@@ -2,9 +2,9 @@ package com.leanengine.server.entity;
 
 import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,16 +17,6 @@ public class LeanQuery {
 
     public LeanQuery(String kind) {
         this.kind = kind;
-    }
-
-    @JsonCreator
-    protected LeanQuery(
-            @JsonProperty("kind") String kind,
-            @JsonProperty("filters") List<QueryFilter> filters,
-            @JsonProperty("sorts") List<QuerySort> sorts) {
-        this.kind = kind;
-        this.filters = filters;
-        this.sorts = sorts;
     }
 
     public void addFilter(String property, QueryFilter.FilterOperator operator, Object value) {
@@ -49,22 +39,60 @@ public class LeanQuery {
         return filters;
     }
 
-    public String toJSON() throws LeanException {
-        ObjectMapper mapper = JsonUtils.getObjectMapper();
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (IOException e) {
-            throw new LeanException(LeanException.Error.QueryJSON, e);
-        }
+    public JsonNode toJson() throws LeanException {
+        ObjectNode json = JsonUtils.getObjectMapper().createObjectNode();
+
+        return json;
     }
 
-    public static LeanQuery parseJSON(String json) throws LeanException {
-        ObjectMapper mapper = JsonUtils.getObjectMapper();
-        try {
-            return mapper.readValue(json, LeanQuery.class);
-        } catch (IOException e) {
-            throw new LeanException(LeanException.Error.QueryJSON, e);
-        }
+    public static LeanQuery fromJson(String json) throws LeanException {
+        return null;
     }
+//        ObjectNode jsonNode;
+//        try {
+//            jsonNode = (ObjectNode) JsonUtils.getObjectMapper().readTree(json);
+//        } catch (IOException e) {
+//            throw new LeanException(LeanException.Error.QueryJSON);
+//        } catch (ClassCastException cce) {
+//            throw new LeanException(LeanException.Error.QueryJSON, " Expected JSON object, instead got JSON array.");
+//        }
+//
+//        // get the 'kind' of the query
+//        LeanQuery query = new LeanQuery(jsonNode.get("kind").getTextValue());
+//        if (query.getKind() == null) {
+//            throw new LeanException(LeanException.Error.QueryJSON, " Missing 'kind' property.");
+//        }
+//
+//        // get 'filters'
+//        ArrayNode filters;
+//        try {
+//            filters = (ArrayNode) jsonNode.get("filters");
+//        } catch (ClassCastException cce) {
+//            throw new LeanException(LeanException.Error.QueryJSON, " Property 'filters' must be a JSON array.");
+//        }
+//        for (JsonNode filter : filters) {
+//            ObjectNode filterNode;
+//            try {
+//                filterNode = (ObjectNode) filter;
+//            } catch (ClassCastException cce) {
+//                throw new LeanException(LeanException.Error.QueryJSON, " Property 'filters' must be a JSON array.");
+//            }
+//            String filterProperty = filterNode.get("property").getTextValue();
+//            String filterOperator = filterNode.get("operator").getTextValue();
+//            Object filterValue = filterNode.get("value").;
+//            query.addFilter(filter);
+//        }
+//
+//
+//        // get 'sorts'
+//        ArrayNode sorts;
+//        try {
+//            sorts = (ArrayNode) jsonNode.get("filters");
+//        } catch (ClassCastException cce) {
+//            throw new LeanException(LeanException.Error.QueryJSON, " Property 'filters' must be a JSON array.");
+//        }
+//
+//        return query;
+//    }
 
 }

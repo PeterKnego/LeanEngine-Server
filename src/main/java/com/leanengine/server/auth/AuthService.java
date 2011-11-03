@@ -1,6 +1,6 @@
 package com.leanengine.server.auth;
 
-import com.leanengine.server.appengine.DatastoreUtils;
+import com.leanengine.server.appengine.AccountUtils;
 
 import java.util.logging.Logger;
 
@@ -26,9 +26,9 @@ public class AuthService {
     private static LeanAccount getAccountByToken(String authToken) {
 
         //todo Use MemCache to cache this
-        AuthToken savedToken = DatastoreUtils.getAuthToken(authToken);
+        AuthToken savedToken = AccountUtils.getAuthToken(authToken);
         if (savedToken == null) return null;
-        LeanAccount user = DatastoreUtils.getAccount(savedToken.accountID);
+        LeanAccount user = AccountUtils.getAccount(savedToken.accountID);
         if (user == null) return null;
 
         return user;
@@ -36,14 +36,14 @@ public class AuthService {
 
     public static void resetCurrentAuthData() {
         String token = tlAuthToken.get();
-        if (token != null) DatastoreUtils.removeAuthToken(token);
+        if (token != null) AccountUtils.removeAuthToken(token);
         tlLeanAccount.remove();
         tlAuthToken.remove();
     }
 
     public static AuthToken createAuthToken(long accountID) {
         AuthToken authToken = new AuthToken(accountID);
-        DatastoreUtils.saveAuthToken(authToken);
+        AccountUtils.saveAuthToken(authToken);
         return authToken;
     }
 

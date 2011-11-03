@@ -5,7 +5,7 @@ import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.leanengine.server.LeanEngineSettings;
 import com.leanengine.server.LeanException;
-import com.leanengine.server.appengine.DatastoreUtils;
+import com.leanengine.server.appengine.AccountUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -76,8 +76,6 @@ public class FacebookAuth {
             if (fetchResponse.getResponseCode() == 200) {
                 return mapper.readTree(new String(fetchResponse.getContent(), "UTF-8"));
             } else {
-                //todo log this - Facebook Graph responded with error code
-                // todo throw error
                 throw new LeanException(LeanException.Error.FacebookAuthError);
             }
         } catch (MalformedURLException ex) {
@@ -134,14 +132,14 @@ public class FacebookAuth {
                         " Missing ID field in user data. Content: " + responseContent);
             }
 
-            LeanAccount account = DatastoreUtils.findAccountByProvider(providerID, "fb-oauth");
+            LeanAccount account = AccountUtils.findAccountByProvider(providerID, "fb-oauth");
             if (account == null) {
                 //todo this is one-to-one mapping between Account and User
                 //change this in the future
 
                 // account does not yet exist - create it
                 account = parseAccountFB(userData);
-                DatastoreUtils.saveAccount(account);
+                AccountUtils.saveAccount(account);
             }
 
             // create our own authentication token
