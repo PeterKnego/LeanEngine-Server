@@ -21,6 +21,7 @@ public class RestApplication extends Application {
         singletons.add(new RestExceptionMapper());
         singletons.add(new EntityRest());
         singletons.add(new PublicServiceRest());
+        singletons.add(new QueryRest());
         singletons.add(new ScriptRest());
 
     }

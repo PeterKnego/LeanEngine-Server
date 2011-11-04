@@ -2,9 +2,6 @@ package com.leanengine.server.entity;
 
 import com.google.appengine.api.datastore.Query;
 import com.leanengine.server.LeanException;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonValue;
 
 public class QueryFilter {
     private String property;
@@ -42,8 +39,7 @@ public class QueryFilter {
         private String operatorString;
         private Query.FilterOperator gaeOperator;
 
-        @JsonCreator
-        static FilterOperator creator(String jsonOperator) throws LeanException {
+        static FilterOperator create(String jsonOperator) throws LeanException {
             if("=".equals(jsonOperator)){
                 return FilterOperator.EQUAL;
             } else if(">".equals(jsonOperator)){

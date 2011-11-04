@@ -26,13 +26,11 @@ public class QueryRest {
 
     @GET
     @Path("/example")
-    public LeanQuery exampleQuery() throws LeanException {
+    public JsonNode exampleQuery() throws LeanException {
         LeanQuery query = new LeanQuery("somekind");
         query.addFilter("prop1", QueryFilter.FilterOperator.EQUAL, "value1");
-        query.addFilter("prop2", QueryFilter.FilterOperator.NOT_EQUAL, "not");
-        query.addFilter("prop3", QueryFilter.FilterOperator.LESS_THAN_OR_EQUAL, 1.23);
-        query.addFilter("prop4", QueryFilter.FilterOperator.IN, "inside");
+        query.addFilter("prop2", QueryFilter.FilterOperator.LESS_THAN_OR_EQUAL, 1.23);
         query.addSort("prop2", QuerySort.SortDirection.ASCENDING);
-        return query;
+        return query.toJson();
     }
 }
