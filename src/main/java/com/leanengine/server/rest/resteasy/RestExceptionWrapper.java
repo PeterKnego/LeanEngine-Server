@@ -15,4 +15,10 @@ public class RestExceptionWrapper {
         message = leanException.getMessage();
         cause = leanException.getCause() != null ? leanException.getCause().getMessage() : null;
     }
+
+     public RestExceptionWrapper(Throwable throwable) {
+        code = 0;
+        message = throwable.getMessage();
+        cause = throwable.getCause() != null ? throwable.getCause().getMessage() : null;
+    }
 }
