@@ -42,15 +42,6 @@ public class LeanQuery {
     public JsonNode toJson() throws LeanException {
         ObjectNode json = JsonUtils.getObjectMapper().createObjectNode();
         json.put("kind", kind);
-//        ArrayNode jsonFilters = JsonUtils.getObjectMapper().createArrayNode();
-//        for (QueryFilter filters : filters) {
-//            ObjectNode jsonFilter = JsonUtils.getObjectMapper().createObjectNode();
-//            jsonFilter.put("property", filters.getProperty());
-//            jsonFilter.put("operator", filters.getOperator().toJSON());
-//            JsonUtils.addTypedValue(jsonFilter, "value", filters.getValue());
-//            jsonFilters.add(jsonFilter);
-//        }
-//        json.put("filters", jsonFilters);
 
         ObjectNode jsonFilters = JsonUtils.getObjectMapper().createObjectNode();
         for (QueryFilter filter : filters) {
@@ -60,19 +51,10 @@ public class LeanQuery {
             } else {
                 jsonFilter = JsonUtils.getObjectMapper().createObjectNode();
             }
-            JsonUtils.addTypedValue(jsonFilter, filter.getOperator().toJSON(), filter.getValue());
+            JsonUtils.addTypedNode(jsonFilter, filter.getOperator().toJSON(), filter.getValue());
             jsonFilters.put(filter.getProperty(), jsonFilter);
         }
         json.put("filter", jsonFilters);
-
-//        ArrayNode jsonSorts = JsonUtils.getObjectMapper().createArrayNode();
-//        for (QuerySort sort : sort) {
-//            ObjectNode jsonSort = JsonUtils.getObjectMapper().createObjectNode();
-//            jsonSort.put("property", sort.getProperty());
-//            jsonSort.put("direction", sort.getDirection().toJSON());
-//            jsonSorts.add(jsonSort);
-//        }
-//        json.put("sort", jsonSorts);
 
         ObjectNode jsonSorts = JsonUtils.getObjectMapper().createObjectNode();
         for (QuerySort sort : sorts) {
@@ -99,7 +81,7 @@ public class LeanQuery {
             throw new LeanException(LeanException.Error.QueryJSON, " Missing 'kind' property.");
         }
 
-        // get 'filters'
+        // get 'filter'
         ObjectNode filters;
         try {
             filters = (ObjectNode) jsonNode.get("filter");
@@ -119,34 +101,13 @@ public class LeanQuery {
                 Iterator<String> operatorIterator = filter.getFieldNames();
                 while (operatorIterator.hasNext()) {
                     String operator = operatorIterator.next();
-                    Object filterValue = JsonUtils.fromJsonTypedValue(filter.get(operator));
+                    Object filterValue = JsonUtils.propertyFromJson(filter.get(operator));
                     query.addFilter(
                             filterProperty,
                             QueryFilter.FilterOperator.create(operator),
                             filterValue);
                 }
             }
-//
-//
-//            for (JsonNode filters : filters) {
-//                JsonNode property = filters.get("property");
-//                if (property == null) throw new LeanException(LeanException.Error.QueryJSON,
-//                        " Missing 'property' field in 'filters' JSON object.");
-//
-//                JsonNode operator = filters.get("operator");
-//                if (operator == null) throw new LeanException(LeanException.Error.QueryJSON,
-//                        " Missing 'operator' field in 'filters' JSON object.");
-//
-//                JsonNode value = filters.get("value");
-//                if (value == null) throw new LeanException(LeanException.Error.QueryJSON,
-//                        " Missing 'value' field in 'filters' JSON object.");
-//
-//                Object filterValue = JsonUtils.fromJsonTypedValue(value);
-//                query.addFilter(
-//                        property.getTextValue(),
-//                        QueryFilter.FilterOperator.create(operator.getTextValue()),
-//                        filterValue);
-//            }
         }
 
         // get 'sort'
@@ -162,21 +123,6 @@ public class LeanQuery {
                 String sortProperty = sortIterator.next();
                 query.addSort(sortProperty, QuerySort.SortDirection.create(sorts.get(sortProperty).getTextValue()));
             }
-
-
-//            for (JsonNode sort : sorts) {
-//                JsonNode property = sort.get("property");
-//                if (property == null) throw new LeanException(LeanException.Error.QueryJSON,
-//                        " Missing 'property' field in 'sort' JSON object.");
-//
-//                JsonNode operator = sort.get("direction");
-//                if (operator == null) throw new LeanException(LeanException.Error.QueryJSON,
-//                        " Missing 'direction' field in 'sort' JSON object.");
-//
-//                query.addSort(
-//                        property.getTextValue(),
-//                        QuerySort.SortDirection.create(operator.getTextValue()));
-//            }
         }
 
         return query;
