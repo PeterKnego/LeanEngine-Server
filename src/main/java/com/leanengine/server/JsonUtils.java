@@ -14,6 +14,7 @@ public class JsonUtils {
 
     /**
      * Returns a thread-local instance of JSON ObjectMapper.
+     *
      * @return ObjectMapper.
      */
     public static ObjectMapper getObjectMapper() {
@@ -89,6 +90,8 @@ public class JsonUtils {
                 return new Date(getLongFromValueNode("value", node));
             } else if ("geopt".equals(type)) {
                 throw new IllegalArgumentException("Value nodes of type 'geopt' are not yet implemented.");
+            } else if ("geohash".equals(type)) {
+                throw new IllegalArgumentException("Value nodes of type 'geohash' are not yet implemented.");
             } else if ("blob".equals(type)) {
                 throw new IllegalArgumentException("Value nodes of type 'blob' are not yet implemented.");
             } else if ("shortblob".equals(type)) {

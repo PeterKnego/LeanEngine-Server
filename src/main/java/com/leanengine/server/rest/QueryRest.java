@@ -30,7 +30,9 @@ public class QueryRest {
         LeanQuery query = new LeanQuery("somekind");
         query.addFilter("prop1", QueryFilter.FilterOperator.EQUAL, "value1");
         query.addFilter("prop2", QueryFilter.FilterOperator.LESS_THAN_OR_EQUAL, 1.23);
+        query.addFilter("prop2", QueryFilter.FilterOperator.GREATER_THAN_OR_EQUAL, 0.5);
         query.addSort("prop2", QuerySort.SortDirection.ASCENDING);
+        query.addSort("prop3", QuerySort.SortDirection.DESCENDING);
         return query.toJson();
     }
 }
