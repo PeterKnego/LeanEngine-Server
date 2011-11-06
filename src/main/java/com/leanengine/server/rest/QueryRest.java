@@ -1,16 +1,16 @@
 package com.leanengine.server.rest;
 
-import com.google.appengine.api.datastore.Entity;
 import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.appengine.DatastoreUtils;
 import com.leanengine.server.entity.LeanQuery;
 import com.leanengine.server.entity.QueryFilter;
+import com.leanengine.server.entity.QueryResult;
 import com.leanengine.server.entity.QuerySort;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ObjectNode;
 
 import javax.ws.rs.*;
-import java.util.List;
 
 @Path("/v1/query")
 @Produces("application/json")
@@ -20,8 +20,12 @@ public class QueryRest {
     @POST
     @Path("/")
     public JsonNode query(String queryJson) throws LeanException {
-        List<Entity> result = DatastoreUtils.queryEntityPrivate(LeanQuery.fromJson(queryJson));
-        return JsonUtils.entityListToJson(result);
+        QueryResult result = DatastoreUtils.queryEntityPrivate(LeanQuery.fromJson(queryJson));
+        ObjectNode jsonResult = JsonUtils.entityListToJson(result.getResult());
+        if (result.getCursor() != null) {
+            jsonResult.put("cursor", result.getCursor().toWebSafeString());
+        }
+        return jsonResult;
     }
 
     @GET

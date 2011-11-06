@@ -4,9 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.auth.AuthService;
 import com.leanengine.server.auth.LeanAccount;
-import com.leanengine.server.entity.LeanQuery;
-import com.leanengine.server.entity.QueryFilter;
-import com.leanengine.server.entity.QuerySort;
+import com.leanengine.server.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +113,7 @@ public class DatastoreUtils {
         return result.getId();
     }
 
-    public static List<Entity> queryEntityPrivate(LeanQuery leanQuery) throws LeanException {
+    public static QueryResult queryEntityPrivate(LeanQuery leanQuery) throws LeanException {
         LeanAccount account = findCurrentAccount();
 
         Query query = new Query(leanQuery.getKind());
@@ -132,9 +130,25 @@ public class DatastoreUtils {
             query.addSort(querySort.getProperty(), querySort.getDirection().getSortDirection());
         }
 
+        FetchOptions fetchOptions = FetchOptions.Builder.withDefaults();
+        QueryOptions options = leanQuery.getQueryOptions();
+        if (leanQuery.getQueryOptions() != null) {
+            if (options.getLimit() != null)
+                fetchOptions.limit(options.getLimit());
+            if (options.getOffset() != null)
+                fetchOptions.offset(options.getOffset());
+            if (options.getPrefetchSize() != null)
+                fetchOptions.prefetchSize(options.getPrefetchSize());
+            if (options.getStartCursor() != null)
+                fetchOptions.startCursor(Cursor.fromWebSafeString(options.getStartCursor()));
+            if (options.getEndCursor() != null)
+                fetchOptions.endCursor(Cursor.fromWebSafeString(options.getEndCursor()));
+        }
+
         PreparedQuery pq = datastore.prepare(query);
 
-        return pq.asList(FetchOptions.Builder.withDefaults());
+        QueryResultList<Entity> result = pq.asQueryResultList(fetchOptions);
+        return new QueryResult(result, result.getCursor());
     }
 
     public static List<String> findAllEtityKinds() throws LeanException {

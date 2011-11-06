@@ -14,6 +14,7 @@ public class LeanQuery {
     private final String kind;
     private List<QueryFilter> filters = new ArrayList<QueryFilter>();
     private List<QuerySort> sorts = new ArrayList<QuerySort>();
+    private QueryOptions queryOptions;
 
     public LeanQuery(String kind) {
         this.kind = kind;
@@ -37,6 +38,14 @@ public class LeanQuery {
 
     public List<QueryFilter> getFilters() {
         return filters;
+    }
+
+    public QueryOptions getQueryOptions() {
+        return queryOptions;
+    }
+
+    public void setQueryOptions(QueryOptions queryOptions) {
+        this.queryOptions = queryOptions;
     }
 
     public JsonNode toJson() throws LeanException {
@@ -124,6 +133,18 @@ public class LeanQuery {
                 query.addSort(sortProperty, QuerySort.SortDirection.create(sorts.get(sortProperty).getTextValue()));
             }
         }
+
+        // get 'options'
+        ObjectNode options;
+        try {
+            options = (ObjectNode) jsonNode.get("options");
+        } catch (ClassCastException cce) {
+            throw new LeanException(LeanException.Error.QueryJSON, " Property 'options' must be a JSON object.");
+        }
+        if (options != null) {
+            query.setQueryOptions(QueryOptions.fromJson(options));
+        }
+
 
         return query;
     }
