@@ -145,15 +145,16 @@ public class DatastoreUtils {
                 fetchOptions.endCursor(Cursor.fromWebSafeString(options.getEndCursor()));
         }
 
-        PreparedQuery pq = datastore.prepare(query);
-
-        QueryResultList<Entity> result;
         try {
+            PreparedQuery pq = datastore.prepare(query);
+
+            QueryResultList<Entity> result;
             result = pq.asQueryResultList(fetchOptions);
+
+            return new QueryResult(result, result.getCursor());
         } catch (DatastoreNeedIndexException dnie) {
-            throw new LeanException(LeanException.Error.AppEngineMissingIndex, dnie);
+            throw new LeanException(LeanException.Error.AppEngineMissingIndex);
         }
-        return new QueryResult(result, result.getCursor());
     }
 
     public static List<String> findAllEtityKinds() throws LeanException {

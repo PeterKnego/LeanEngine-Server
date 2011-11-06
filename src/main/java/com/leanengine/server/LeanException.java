@@ -32,7 +32,8 @@ public class LeanException extends Throwable {
         ScriptExecutionError(20, "Error executing script: "),
         ScriptOutputError(21, "Illegal script result error: custom scripts must produce a Javascript object. Script: "),
         NotAuthorized(40, "No account active or account not authorized to access this resource."),
-        AppEngineMissingIndex(41, "AppEngine query error: missing index.");
+        AppEngineMissingIndex(41, "AppEngine query error: missing index. Try running this query on dev server to " +
+                "automatically create needed indexes and then upload to production.");
 
 
         public int errorCode;
