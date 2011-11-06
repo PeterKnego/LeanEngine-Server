@@ -31,7 +31,9 @@ public class LeanException extends Throwable {
         OpenIdAuthNotEnabled(12, "Server configuration error: OpenID login not enabled."),
         ScriptExecutionError(20, "Error executing script: "),
         ScriptOutputError(21, "Illegal script result error: custom scripts must produce a Javascript object. Script: "),
-        NotAuthorized(40, "No account active or account not authorized to access this resource.");
+        NotAuthorized(40, "No account active or account not authorized to access this resource."),
+        AppEngineMissingIndex(41, "AppEngine query error: missing index.");
+
 
         public int errorCode;
         public String errorMessage;

@@ -147,7 +147,12 @@ public class DatastoreUtils {
 
         PreparedQuery pq = datastore.prepare(query);
 
-        QueryResultList<Entity> result = pq.asQueryResultList(fetchOptions);
+        QueryResultList<Entity> result;
+        try {
+            result = pq.asQueryResultList(fetchOptions);
+        } catch (DatastoreNeedIndexException dnie) {
+            throw new LeanException(LeanException.Error.AppEngineMissingIndex, dnie);
+        }
         return new QueryResult(result, result.getCursor());
     }
 
