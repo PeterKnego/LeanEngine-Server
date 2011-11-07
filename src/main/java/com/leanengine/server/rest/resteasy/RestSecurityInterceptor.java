@@ -36,7 +36,8 @@ public class RestSecurityInterceptor implements PreProcessInterceptor {
             MultivaluedMap<String, Object> headers = new Headers<Object>();
             headers.add("Content-Type", "text/plain");
             response.setMetadata(headers);
-            response.setEntity("Error 401 Unauthorized: " + request.getPreprocessedPath());
+            response.setEntity("{\"code\":401, \"message\":\"HTTP error 401: Unauthorized to access " +
+                    request.getPreprocessedPath() + "\"" + "");
             return response;
         }
         return null;
