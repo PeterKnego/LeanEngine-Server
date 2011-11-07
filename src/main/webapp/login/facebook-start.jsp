@@ -8,6 +8,7 @@
 
 <%
     String type = request.getParameter("type");
+    String display = request.getParameter("display");
     Scheme scheme;
     String facebookAntiCSRF;
 
@@ -42,7 +43,7 @@
     String loginUrl = null;
     try {
         loginUrl = isMobile ?
-                FacebookAuth.getLoginUrlMobile(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF) :
+                FacebookAuth.getLoginUrlMobile(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF, display) :
                 FacebookAuth.getLoginUrlWeb(request.getScheme() + "://" + request.getServerName(), facebookAntiCSRF);
     } catch (LeanException e) {
         response.sendRedirect(scheme.getErrorUrl(e));

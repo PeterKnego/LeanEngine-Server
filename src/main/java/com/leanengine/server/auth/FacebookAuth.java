@@ -22,19 +22,26 @@ public class FacebookAuth {
 
     static private ObjectMapper mapper = new ObjectMapper();
 
-    public static String getLoginUrlMobile(String serverName, String state) throws LeanException {
+    public static String getLoginUrlMobile(String serverName, String state, String display) throws LeanException {
         if (LeanEngineSettings.getFacebookAppID() == null) {
             throw new LeanException(LeanException.Error.FacebookAuthMissingAppId);
         }
 
         String redirectUrl = serverName + "/login/facebook-auth.jsp";
-        return "https://m.facebook.com/dialog/oauth?" +
-                "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
-                "redirect_uri=" + redirectUrl + "&" +
-                "display=touch&" +
-                "scope=offline_access&" +
-                "response_type=code&" +
-                "state=" + state;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+                .append("https://m.facebook.com/dialog/oauth?")
+                .append("client_id=").append(LeanEngineSettings.getFacebookAppID()).append("&")
+                .append("redirect_uri=").append(redirectUrl).append("&");
+
+        if (display != null)
+            stringBuilder.append("display=").append(display).append("&");
+
+        stringBuilder.append("scope=offline_access&")
+                .append("response_type=code&")
+                .append("state=")
+                .append(state);
+        return stringBuilder.toString();
     }
 
     public static String getLoginUrlWeb(String serverName, String state) throws LeanException {
