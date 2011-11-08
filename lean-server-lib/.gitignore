@@ -1,0 +1,15 @@
+.idea/
+*/.idea/
+*.iml
+*.ipr
+*.iws
+*/*.iml
+*/*.ipr
+*/*.iws
+target/
+out/
+lean-server-lib/target/
+lean-server-lib/out/
+lean-server-main/target/
+lean-server-main/out/
+.DS_Store

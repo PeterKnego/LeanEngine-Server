@@ -1,11 +1,23 @@
 package com.leanengine.server;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.utils.SystemProperty;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LeanEngineSettings {
+
+    static{
+        if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development){
+            Map<String, Object> tempSettings = load();
+            tempSettings.put("fbLoginEnable", true);
+            tempSettings.put("fbAppId", "mockFacebookAppId");
+            tempSettings.put("fbAppSecret", "mockFacebookAppSecret");
+            tempSettings.put("openIdLoginEnable", true);
+            saveSettings(tempSettings);
+        }
+    }
 
     private static Map<String, Object> settings;
 
