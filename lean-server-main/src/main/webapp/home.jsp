@@ -26,7 +26,7 @@
 <div class="topbar">
     <div class="topbar-inner">
         <div class="container">
-            <a class="brand" href="#">LeanEngine Demo</a>
+            <a class="brand" href="/">LeanEngine Demo</a>
             <%--<ul class="nav">--%>
             <%--<li class="active"><a href="#overview">Entities</a></li>--%>
             <%--<li><a href="#about">About</a></li>--%>
@@ -39,17 +39,17 @@
                 <ul class="nav">
                     <li><a>Login with</a></li>
                     <li>
-                        <a href='/facebook?redirect=<%= request.getRequestURI()%>'>
+                        <a href='/facebook?onlogin=<%= request.getRequestURI()%>&onerror=/loginerror.jsp'>
                             <img height="24px" width="24px" src="images/facebook.png" alt="Facebook login"/>
                         </a>
                     </li>
                     <li>
-                        <a href='/openid?redirect=/home.jsp&provider=google'>
+                        <a href='/openid?onlogin=<%= request.getRequestURI()%>&onerror=/loginerror.jsp&provider=google'>
                             <img height="24px" width="24px" src="images/google.png" alt="Google login"/>
                         </a>
                     </li>
                     <li>
-                        <a href='/openid?redirect=<%= request.getRequestURI()%>&provider=yahoo'>
+                        <a href='/openid?onlogin=<%= request.getRequestURI()%>&onerror=/loginerror.jsp&provider=yahoo'>
                             <img height="24px" width="24px" src="images/yahoo.png" alt="Yahoo login"/>
                         </a>
                     </li>

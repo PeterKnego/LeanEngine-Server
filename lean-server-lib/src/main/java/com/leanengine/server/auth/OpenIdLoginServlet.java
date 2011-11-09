@@ -26,6 +26,29 @@ public class OpenIdLoginServlet extends HttpServlet {
 
             String type = request.getParameter("type") == null ? "web" : request.getParameter("type");
 
+            String errorUrl;
+            if (request.getParameter("onerror") != null) {
+                errorUrl = request.getParameter("onerror");
+            } else {
+                errorUrl = "/loginerror";
+            }
+
+            // redirectUrl is composed so that it redirects twice:
+            // first to /login/openid-auth.jsp for authentication
+            // second to the final destination URL
+            String redirectUrl;
+            if (type.equals("mobile")) {
+                redirectUrl = "/openid?next=@mobile";
+            } else {
+                String redirectParam;
+                if (request.getParameter("redirect") != null) {
+                    redirectParam = request.getParameter("redirect");
+                } else {
+                    redirectParam = "/";
+                }
+                redirectUrl = "/openid?next=" + redirectParam + "@" + errorUrl;
+            }
+
             // check if OpenID is enabled
             if (!LeanEngineSettings.isOpenIdLoginEnabled()) {
                 Scheme scheme;
@@ -38,7 +61,8 @@ public class OpenIdLoginServlet extends HttpServlet {
                     }
                     scheme = new WebScheme(request.getScheme(), hostname);
                 }
-                response.sendRedirect(scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthNotEnabled)));
+                response.sendRedirect(
+                        scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthNotEnabled), "/loginerror"));
                 return;
             }
 
@@ -52,25 +76,6 @@ public class OpenIdLoginServlet extends HttpServlet {
                 openIdProvider = "https://me.yahoo.com";
             }
 
-            // redirectUrl is composed so that it redirects twice:
-            // first to /login/openid-auth.jsp for authentication
-            // second to the final destination URL
-            String redirectUrl;
-            if (type.equals("mobile")) {
-                redirectUrl = "/openid?next=@mobile";
-            } else {
-                String redirectParam;
-                if (request.getParameter("redirect") != null) {
-                    redirectParam = request.getParameter("redirect");
-                } else if (request.getHeader("Referer") != null) {
-                    redirectParam = request.getHeader("Referer");
-                } else {
-                    redirectParam = "/";
-                }
-                redirectUrl = "/openid?next=" + redirectParam;
-            }
-
-
             String loginUrl = UserServiceFactory.getUserService().createLoginURL(redirectUrl, null, openIdProvider, null);
 
             response.sendRedirect(loginUrl);
@@ -79,6 +84,9 @@ public class OpenIdLoginServlet extends HttpServlet {
         } else { // second part of the OpenID flow
             // type parameters tells us the type of redirect we should perform
             Scheme scheme;
+            String redirectUrl = null;
+            String errorUrl = null;
+
             if (nextUrl.equals("@mobile")) {
                 scheme = new MobileScheme(request.getServerName());
             } else {
@@ -87,6 +95,11 @@ public class OpenIdLoginServlet extends HttpServlet {
                     hostname = hostname + ":" + request.getLocalPort();
                 }
                 scheme = new WebScheme(request.getScheme(), hostname);
+
+                // extract the redirect URL
+                String[] stateItems = nextUrl.split("@");
+                redirectUrl = (stateItems.length == 2) ? stateItems[0] : null;
+                errorUrl = (stateItems.length == 2) ? stateItems[1] : null;
             }
 
 
@@ -95,7 +108,9 @@ public class OpenIdLoginServlet extends HttpServlet {
 
             //OpenID login did not succeed
             if (currentUser == null) {
-                response.sendRedirect(scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthFailed)));
+                response.sendRedirect(
+                        scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthFailed), errorUrl));
+                return;
             }
             // get toke for this user
             AuthToken authToken;
@@ -130,7 +145,11 @@ public class OpenIdLoginServlet extends HttpServlet {
             session.setAttribute("lean_token", authToken.token);
 
             //send lean_token back to browser
-            response.sendRedirect(scheme.getUrl(authToken.token, nextUrl));
+            try {
+                response.sendRedirect(scheme.getUrl(authToken.token, redirectUrl));
+            } catch (LeanException e) {
+                response.sendRedirect(scheme.getErrorUrl(e, errorUrl));
+            }
         }
     }
 }

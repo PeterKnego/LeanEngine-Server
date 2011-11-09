@@ -17,19 +17,9 @@ public class MobileScheme implements Scheme {
         this.hostname = hostname;
     }
 
-//    @Override
-//    public String getUrl(String authToken) {
-//        return getUrl(authToken, null);
-//    }
-
     @Override
     public String getUrl(String authToken, String redirectUrl) {
         return scheme + hostname + "/?auth_token=" + authToken;
-    }
-
-    @Override
-    public String getErrorUrl(LeanException exception) {
-        return getErrorUrl(exception, null);
     }
 
     @Override

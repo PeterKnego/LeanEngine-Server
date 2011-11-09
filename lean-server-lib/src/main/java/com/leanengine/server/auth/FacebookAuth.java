@@ -108,7 +108,7 @@ public class FacebookAuth {
             if (fetchResponse.getResponseCode() == 400) {
 
                 // error: facebook server error replied with 400
-                throw new LeanException(LeanException.Error.FacebookAuthResponseError,"\n\n"+responseContent);
+                throw new LeanException(LeanException.Error.FacebookAuthResponseError," \n\n"+responseContent);
             }
 
             String fbAccessToken = null, expires = null;

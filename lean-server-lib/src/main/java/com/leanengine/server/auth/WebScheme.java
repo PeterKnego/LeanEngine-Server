@@ -18,21 +18,12 @@ public class WebScheme implements Scheme {
         this.scheme = scheme + "://";
     }
 
-//    @Override
-//    public String getUrl(String authToken) {
-//        return getUrl(authToken, null);
-//    }
-
      @Override
-    public String getUrl(String authToken, String redirectUrl) {
-        // if null set default value
-        redirectUrl = redirectUrl == null ? "/login/logindone.jsp" : redirectUrl;
+    public String getUrl(String authToken, String redirectUrl) throws LeanException {
+        // if null throw error
+        if(redirectUrl ==null)
+            throw new LeanException(LeanException.Error.MissingRedirectUrl);
         return scheme + hostname + redirectUrl;
-    }
-
-    @Override
-    public String getErrorUrl(LeanException exception) {
-        return getErrorUrl(exception, null);
     }
 
     @Override

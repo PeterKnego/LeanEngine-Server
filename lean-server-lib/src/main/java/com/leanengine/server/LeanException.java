@@ -34,7 +34,8 @@ public class LeanException extends Throwable {
         NotAuthorized(40, "No account active or account not authorized to access this resource."),
         AppEngineMissingIndex(41, "AppEngine query error: missing index. Try running this query on dev server to " +
                 "automatically create needed indexes and then upload to production."),
-        ServerSessionsNotEnabled(42, "Sessions not enabled on server.");
+        ServerSessionsNotEnabled(42, "Sessions not enabled on server."),
+        MissingRedirectUrl(43, "Login request must have URL parameter 'onlogin' used for redirect on successful login.");
 
 
         public int errorCode;

@@ -1,5 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Login error</title>
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
@@ -10,12 +9,7 @@
 <div class="topbar">
     <div class="topbar-inner">
         <div class="container">
-            <a class="brand" href="#">LeanEngine Demo</a>
-            <%--<ul class="nav">--%>
-            <%--<li class="active"><a href="#overview">Entities</a></li>--%>
-            <%--<li><a href="#about">About</a></li>--%>
-            <%--<li><a href="#grid-system">Grid</a></li>--%>
-            <%--</ul>--%>
+            <a class="brand" href="/">LeanEngine Demo</a>
         </div>
     </div>
 </div>

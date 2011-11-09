@@ -1,7 +1,11 @@
 package com.leanengine.server.auth;
 
 import com.leanengine.server.appengine.AccountUtils;
+import com.leanengine.server.appengine.ServerUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class AuthService {
@@ -22,6 +26,33 @@ public class AuthService {
         tlAuthToken.remove();
     }
 
+    public static AuthToken createMockFacebookAccount(String email) {
+        if(!ServerUtils.isDevServer()){
+            throw new IllegalStateException("Method 'createMockFacebookAccount(email)' should only be called while running Dev Server.");
+        }
+
+        LeanAccount account = AccountUtils.findAccountByEmail(email, "fb-oauth");
+        if (account == null) {
+            //todo this is one-to-one mapping between Account and User
+            //change this in the future
+
+            Map<String, Object> props = new HashMap<String, Object>(1);
+            props.put("email", email);
+
+            // account does not yet exist - create it
+            account = new LeanAccount(
+                    0,
+                    email,
+                    UUID.randomUUID().toString(),
+                    "fb-oauth",
+                    props);
+            AccountUtils.saveAccount(account);
+        }
+
+        // create our own authentication token
+        // todo retrieve existing token if not expired
+        return AuthService.createAuthToken(account.id);
+    }
 
     private static LeanAccount getAccountByToken(String authToken) {
 

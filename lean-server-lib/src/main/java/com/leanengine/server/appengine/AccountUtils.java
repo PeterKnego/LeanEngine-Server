@@ -42,6 +42,21 @@ public class AccountUtils {
         return (accountEntity == null) ? null : toLeanAccount(accountEntity);
     }
 
+     public static LeanAccount findAccountByEmail(String email, String provider) {
+        if (email == null) {
+            log.severe("Empty email. Can not find account without email.");
+            return null;
+        }
+        Query query = new Query(accountsKind);
+        query.addFilter("email", Query.FilterOperator.EQUAL, email);
+        query.addFilter("_provider", Query.FilterOperator.EQUAL, provider);
+        PreparedQuery pq = datastore.prepare(query);
+
+        Entity accountEntity = pq.asSingleEntity();
+
+        return (accountEntity == null) ? null : toLeanAccount(accountEntity);
+    }
+
     public static AuthToken getAuthToken(String token) {
         //todo use MemCache
         Entity tokenEntity;

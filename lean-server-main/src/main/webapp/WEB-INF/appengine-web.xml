@@ -3,16 +3,12 @@
     <application>lean-engine</application>
     <version>4</version>
 
-    <!--<system-properties>-->
-    <!--<property id="java.util.logging.config.file" value="WEB-INF/classes/logging.properties"/>-->
-    <!--</system-properties>-->
-
+    <!--Sessions MUST be enabled-->
     <sessions-enabled>true</sessions-enabled>
 
     <admin-console>
         <page name="LeanEngine Settings" url="/admin/settings.jsp"/>
         <page name="LeanEngine Scripts" url="/admin/scripts.jsp"/>
-        <page name="Test Runner" url="/admin/testrunner.jsp"/>
     </admin-console>
 
 </appengine-web-app>

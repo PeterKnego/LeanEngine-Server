@@ -29,6 +29,14 @@
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>LoginError</servlet-name>
+        <servlet-class>com.leanengine.server.auth.LoginErrorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginError</servlet-name>
+        <url-pattern>/loginerror</url-pattern>
+    </servlet-mapping>
 
     <!--Resteasy-->
     <context-param>
