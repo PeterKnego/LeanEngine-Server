@@ -43,7 +43,7 @@ public class WebScheme implements Scheme {
         // if null set default value
         redirectUrl = redirectUrl == null ? "/login/loginerror.jsp" : redirectUrl;
         try {
-            return scheme + hostname + redirectUrl + "?errorlogin=true&errorcode" + exception.getErrorCode() +
+            return scheme + hostname + redirectUrl + "?errorlogin=true&errorcode=" + exception.getErrorCode() +
                     "&errormsg=" + URLEncoder.encode(exception.getMessage(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             // should not happen - UTF-8 is supported on all JVMs

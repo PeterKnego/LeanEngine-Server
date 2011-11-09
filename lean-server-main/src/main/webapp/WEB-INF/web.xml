@@ -4,6 +4,24 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
+    <!--Login pages-->
+    <servlet>
+        <servlet-name>OpenIdLogin</servlet-name>
+        <servlet-class>com.leanengine.server.login.OpenIdLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OpenIdLogin</servlet-name>
+        <url-pattern>/openid</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>FacebookLogin</servlet-name>
+        <servlet-class>com.leanengine.server.login.FacebookLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FacebookLogin</servlet-name>
+        <url-pattern>/facebook</url-pattern>
+    </servlet-mapping>
+
     <!--Resteasy-->
     <context-param>
         <param-name>javax.ws.rs.Application</param-name>
@@ -40,36 +58,37 @@
     <!--SecurityFilter is optional and should be used to secure web pages if needed-->
     <!--Do not use this for REST - it is already secured by it own internal mechanism.-->
     <!--<filter>-->
-        <!--<filter-name>SecurityFilter</filter-name>-->
-        <!--<filter-class>com.leanengine.server.SecurityFilterlter-class>-->
+    <!--<filter-name>SecurityFilter</filter-name>-->
+    <!--<filter-class>com.leanengine.server.SecurityFilterlter-class>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
-        <!--<filter-name>SecurityFilter</filter-name>-->
-        <!--<url-pattern>/rest/*</url-pattern>-->
+    <!--<filter-name>SecurityFilter</filter-name>-->
+    <!--<url-pattern>/rest/*</url-pattern>-->
     <!--</filter-mapping>-->
 
     <!--DumpFilter dumps request&response headers and body.-->
     <!--Handy when troubleshooting.-->
     <!--<filter>-->
-        <!--<filter-name>DumpFilter</filter-name>-->
-        <!--<filter-class>com.leanengine.server.DumpFilter</filter-class>-->
-        <!--<init-param>-->
-            <!--<param-name>dumpRequest</param-name>-->
-            <!--<param-value>true</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
-            <!--<param-name>dumpResponse</param-name>-->
-            <!--<param-value>true</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
-            <!--<param-name>dumpHeader</param-name>-->
-            <!--<param-value>true</param-value>-->
-        <!--</init-param>-->
+    <!--<filter-name>DumpFilter</filter-name>-->
+    <!--<filter-class>com.leanengine.server.DumpFilter</filter-class>-->
+    <!--<init-param>-->
+    <!--<param-name>dumpRequest</param-name>-->
+    <!--<param-value>true</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>dumpResponse</param-name>-->
+    <!--<param-value>true</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>dumpHeader</param-name>-->
+    <!--<param-value>true</param-value>-->
+    <!--</init-param>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
-        <!--<filter-name>DumpFilter</filter-name>-->
-        <!--<url-pattern>/rest/*</url-pattern>-->
+    <!--<filter-name>DumpFilter</filter-name>-->
+    <!--<url-pattern>/rest/*</url-pattern>-->
     <!--</filter-mapping>-->
+
 
     <welcome-file-list>
         <welcome-file>home.jsp</welcome-file>

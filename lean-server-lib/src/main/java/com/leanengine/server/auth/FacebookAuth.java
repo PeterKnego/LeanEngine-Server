@@ -3,6 +3,7 @@ package com.leanengine.server.auth;
 import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
+import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanEngineSettings;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.appengine.AccountUtils;
@@ -17,17 +18,18 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class FacebookAuth {
 
-    static private ObjectMapper mapper = new ObjectMapper();
+    private static final Logger log = Logger.getLogger(FacebookAuth.class.getName());
 
-    public static String getLoginUrlMobile(String serverName, String state, String display) throws LeanException {
+    public static String getLoginUrlMobile(String serverName, String state, String facebookLoginPath, String display) throws LeanException {
         if (LeanEngineSettings.getFacebookAppID() == null) {
             throw new LeanException(LeanException.Error.FacebookAuthMissingAppId);
         }
 
-        String redirectUrl = serverName + "/login/facebook-auth.jsp";
+        String redirectUrl = serverName + facebookLoginPath;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
                 .append("https://m.facebook.com/dialog/oauth?")
@@ -44,12 +46,12 @@ public class FacebookAuth {
         return stringBuilder.toString();
     }
 
-    public static String getLoginUrlWeb(String serverName, String state) throws LeanException {
+    public static String getLoginUrlWeb(String serverName, String state, String facebookLoginPath) throws LeanException {
         if (LeanEngineSettings.getFacebookAppID() == null) {
             throw new LeanException(LeanException.Error.FacebookAuthMissingAppId);
         }
 
-        String redirectUrl = serverName + "/login/facebook-auth.jsp";
+        String redirectUrl = serverName + facebookLoginPath;
         return "https://www.facebook.com/dialog/oauth?" +
                 "client_id=" + LeanEngineSettings.getFacebookAppID() + "&" +
                 "redirect_uri=" + redirectUrl + "&" +
@@ -81,7 +83,7 @@ public class FacebookAuth {
         try {
             fetchResponse = fetchService.fetch(new URL(url));
             if (fetchResponse.getResponseCode() == 200) {
-                return mapper.readTree(new String(fetchResponse.getContent(), "UTF-8"));
+                return JsonUtils.getObjectMapper().readTree(new String(fetchResponse.getContent(), "UTF-8"));
             } else {
                 throw new LeanException(LeanException.Error.FacebookAuthError);
             }
@@ -99,13 +101,15 @@ public class FacebookAuth {
 
         try {
             URL facebookGraphUrl = new URL(FacebookAuth.getGraphAuthUrl(currentUrl, code));
+            log.info("facebookGraphUrl="+facebookGraphUrl);
             URLFetchService fetchService = URLFetchServiceFactory.getURLFetchService();
             HTTPResponse fetchResponse = fetchService.fetch(facebookGraphUrl);
-            if (fetchResponse.getResponseCode() == 400) {
-                // error: facebook server error replied with 400
-                throw new LeanException(LeanException.Error.FacebookAuthResponseError);
-            }
             String responseContent = new String(fetchResponse.getContent(), Charset.forName("UTF-8"));
+            if (fetchResponse.getResponseCode() == 400) {
+
+                // error: facebook server error replied with 400
+                throw new LeanException(LeanException.Error.FacebookAuthResponseError,"\n\n"+responseContent);
+            }
 
             String fbAccessToken = null, expires = null;
             String[] splitResponse = responseContent.split("&");

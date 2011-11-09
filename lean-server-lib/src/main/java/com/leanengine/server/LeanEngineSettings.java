@@ -2,22 +2,12 @@ package com.leanengine.server;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.utils.SystemProperty;
+import com.leanengine.server.appengine.ServerUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LeanEngineSettings {
-
-    static{
-        if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development){
-            Map<String, Object> tempSettings = load();
-            tempSettings.put("fbLoginEnable", true);
-            tempSettings.put("fbAppId", "mockFacebookAppId");
-            tempSettings.put("fbAppSecret", "mockFacebookAppSecret");
-            tempSettings.put("openIdLoginEnable", true);
-            saveSettings(tempSettings);
-        }
-    }
 
     private static Map<String, Object> settings;
 
@@ -30,6 +20,15 @@ public class LeanEngineSettings {
             settings = leanEntity.getProperties();
         } catch (EntityNotFoundException e) {
             settings = new HashMap<String, Object>();
+
+            // By default enable all logins on Development server
+            if (ServerUtils.isDevServer()) {
+                settings.put("fbLoginEnable", true);
+                settings.put("fbAppId", "mockFacebookAppId");
+                settings.put("fbAppSecret", "mockFacebookAppSecret");
+                settings.put("openIdLoginEnable", true);
+                saveSettings(settings);
+            }
         }
         return settings;
     }

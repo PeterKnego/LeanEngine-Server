@@ -39,17 +39,17 @@
                 <ul class="nav">
                     <li><a>Login with</a></li>
                     <li>
-                        <a href='/login/facebook-start.jsp?redirect=<%= request.getRequestURI()%>'>
+                        <a href='/facebook?redirect=<%= request.getRequestURI()%>'>
                             <img height="24px" width="24px" src="images/facebook.png" alt="Facebook login"/>
                         </a>
                     </li>
                     <li>
-                        <a href='/login/openid-start.jsp?redirect=/home.jsp&provider=google'>
+                        <a href='/openid?redirect=/home.jsp&provider=google'>
                             <img height="24px" width="24px" src="images/google.png" alt="Google login"/>
                         </a>
                     </li>
                     <li>
-                        <a href='/login/openid-start.jsp?redirect=<%= request.getRequestURI()%>&provider=yahoo'>
+                        <a href='/openid?redirect=<%= request.getRequestURI()%>&provider=yahoo'>
                             <img height="24px" width="24px" src="images/yahoo.png" alt="Yahoo login"/>
                         </a>
                     </li>
