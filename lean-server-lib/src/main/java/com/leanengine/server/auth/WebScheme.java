@@ -18,10 +18,10 @@ public class WebScheme implements Scheme {
         this.scheme = scheme + "://";
     }
 
-    @Override
-    public String getUrl(String authToken) {
-        return getUrl(authToken, null);
-    }
+//    @Override
+//    public String getUrl(String authToken) {
+//        return getUrl(authToken, null);
+//    }
 
      @Override
     public String getUrl(String authToken, String redirectUrl) {

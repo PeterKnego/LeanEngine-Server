@@ -4,7 +4,7 @@ import com.leanengine.server.LeanException;
 
 public interface Scheme {
 
-    String getUrl(String authToken);
+//    String getUrl(String authToken);
 
     String getUrl(String authToken, String redirectUrl);
 

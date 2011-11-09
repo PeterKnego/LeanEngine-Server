@@ -1,4 +1,4 @@
-package com.leanengine.server.login;
+package com.leanengine.server.auth;
 
 import com.leanengine.server.LeanEngineSettings;
 import com.leanengine.server.LeanException;

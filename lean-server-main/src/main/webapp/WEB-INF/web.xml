@@ -7,7 +7,7 @@
     <!--Login pages-->
     <servlet>
         <servlet-name>OpenIdLogin</servlet-name>
-        <servlet-class>com.leanengine.server.login.OpenIdLoginServlet</servlet-class>
+        <servlet-class>com.leanengine.server.auth.OpenIdLoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OpenIdLogin</servlet-name>
@@ -15,11 +15,19 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>FacebookLogin</servlet-name>
-        <servlet-class>com.leanengine.server.login.FacebookLoginServlet</servlet-class>
+        <servlet-class>com.leanengine.server.auth.FacebookLoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>FacebookLogin</servlet-name>
         <url-pattern>/facebook</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>com.leanengine.server.auth.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <!--Resteasy-->

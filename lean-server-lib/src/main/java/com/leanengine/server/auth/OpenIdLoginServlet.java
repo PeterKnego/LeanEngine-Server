@@ -1,11 +1,10 @@
-package com.leanengine.server.login;
+package com.leanengine.server.auth;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.leanengine.server.LeanEngineSettings;
 import com.leanengine.server.LeanException;
 import com.leanengine.server.appengine.AccountUtils;
-import com.leanengine.server.auth.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -60,9 +59,15 @@ public class OpenIdLoginServlet extends HttpServlet {
             if (type.equals("mobile")) {
                 redirectUrl = "/openid?next=@mobile";
             } else {
-                redirectUrl = request.getParameter("redirect") == null ?
-                        "/openid?next=/login/logindone.jsp" :
-                        "/openid?next=" + request.getParameter("redirect");
+                String redirectParam;
+                if (request.getParameter("redirect") != null) {
+                    redirectParam = request.getParameter("redirect");
+                } else if (request.getHeader("Referer") != null) {
+                    redirectParam = request.getHeader("Referer");
+                } else {
+                    redirectParam = "/";
+                }
+                redirectUrl = "/openid?next=" + redirectParam;
             }
 
 

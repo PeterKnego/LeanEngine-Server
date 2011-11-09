@@ -60,8 +60,8 @@
             %>
             <div class="pull-right">
                 <ul class="nav">
-                    <li><a href='/login/logoutredirect.jsp'>Logout</a></li>
-                    <li><a href='/login/logoutredirect.jsp'>
+                    <li><a href='/logout'>Logout</a></li>
+                    <li><a href='/logout'>
                         <img height="24px" width="24px" src="images/exit.png" alt="Logout"/>
                     </a></li>
                 </ul>
