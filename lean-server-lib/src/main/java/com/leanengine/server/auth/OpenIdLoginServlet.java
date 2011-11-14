@@ -34,11 +34,11 @@ public class OpenIdLoginServlet extends HttpServlet {
             }
 
             // redirectUrl is composed so that it redirects twice:
-            // first to /login/openid-auth.jsp for authentication
+            // first to /openid for authentication
             // second to the final destination URL
             String redirectUrl;
             if (type.equals("mobile")) {
-                redirectUrl = "/openid?next=@mobile";
+                redirectUrl = request.getRequestURI()+"?next=@mobile";
             } else {
                 String redirectParam;
                 if (request.getParameter("redirect") != null) {
@@ -46,7 +46,7 @@ public class OpenIdLoginServlet extends HttpServlet {
                 } else {
                     redirectParam = "/";
                 }
-                redirectUrl = "/openid?next=" + redirectParam + "@" + errorUrl;
+                redirectUrl = request.getRequestURI()+ "?next=" + redirectParam + "@" + errorUrl;
             }
 
             // check if OpenID is enabled

@@ -22,7 +22,7 @@ public class FacebookMockLogin {
                 .append("<label for='email' style='width: 3em'>Email:</label>\n")
                 .append(" <input type='text' name='email' id='email' value='test@example.com'>\n")
                 .append("</p>\n").append("<p style='margin: .5em 0 0 3em; font-size:12px'>\n")
-                .append("</p>\n").append("<input type='hidden' name='continue' value='/openid?next=/@/loginerror.jsp'>\n")
+                .append("</p>\n").append("<input type='hidden' name='continue' value='error'>\n")
                 .append("<p style='margin-left: 3em;'>\n")
                 .append("<input name='action' type='submit' value='Log In'>\n")
                 .append("<input name='action' type='submit' value='Log Out'>\n")
