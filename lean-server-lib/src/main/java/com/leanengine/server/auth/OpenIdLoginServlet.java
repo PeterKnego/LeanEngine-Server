@@ -41,8 +41,8 @@ public class OpenIdLoginServlet extends HttpServlet {
                 redirectUrl = request.getRequestURI()+"?next=@mobile";
             } else {
                 String redirectParam;
-                if (request.getParameter("redirect") != null) {
-                    redirectParam = request.getParameter("redirect");
+                if (request.getParameter("onlogin") != null) {
+                    redirectParam = request.getParameter("onlogin");
                 } else {
                     redirectParam = "/";
                 }
@@ -62,7 +62,7 @@ public class OpenIdLoginServlet extends HttpServlet {
                     scheme = new WebScheme(request.getScheme(), hostname);
                 }
                 response.sendRedirect(
-                        scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthNotEnabled), "/loginerror"));
+                        scheme.getErrorUrl(new LeanException(LeanException.Error.OpenIdAuthNotEnabled), errorUrl));
                 return;
             }
 

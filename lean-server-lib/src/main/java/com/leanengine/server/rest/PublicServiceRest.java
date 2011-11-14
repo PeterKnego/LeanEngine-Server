@@ -18,14 +18,14 @@ public class PublicServiceRest {
         return instance;
     }
 
-
-    @POST
-    @Path("/loginurl")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String createLoginURL(String federatedIdentity) {
-        return UserServiceFactory.getUserService().createLoginURL("/mobilereturn.jsp", null, federatedIdentity, null);
-    }
+//
+//    @POST
+//    @Path("/loginurl")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    @Consumes(MediaType.TEXT_PLAIN)
+//    public String createLoginURL(String federatedIdentity) {
+//        return UserServiceFactory.getUserService().createLoginURL("/mobilereturn.jsp", null, federatedIdentity, null);
+//    }
 
 
     @GET

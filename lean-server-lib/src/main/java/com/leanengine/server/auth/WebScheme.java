@@ -32,7 +32,7 @@ public class WebScheme implements Scheme {
         log.severe(exception.getMessage());
 
         // if null set default value
-        redirectUrl = redirectUrl == null ? "/login/loginerror.jsp" : redirectUrl;
+        redirectUrl = redirectUrl == null ? "/loginerror" : redirectUrl;
         try {
             return scheme + hostname + redirectUrl + "?errorlogin=true&errorcode=" + exception.getErrorCode() +
                     "&errormsg=" + URLEncoder.encode(exception.getMessage(), "UTF-8");
