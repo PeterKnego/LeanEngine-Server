@@ -97,7 +97,7 @@ public class FacebookAuth {
         return null;
     }
 
-    public static AuthToken graphAuthenticate(String currentUrl, String code) throws LeanException {
+    public static AuthToken authenticateWithOAuthGraphAPI(String currentUrl, String code) throws LeanException {
 
         try {
             URL facebookGraphUrl = new URL(FacebookAuth.getGraphAuthUrl(currentUrl, code));

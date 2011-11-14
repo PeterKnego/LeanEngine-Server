@@ -9,7 +9,6 @@ public class LeanException extends Throwable {
         EmptyEntity(102, "LeanEntity contains no properties."),
         IllegalEntityFormat(103, "Illegal LeanEntity format."),
         EntityNotFound(104, "Entity not found."),
-        EntityToJSON(105, "Entity missing."),
         QueryJSON(105, "Query JSON could not be parsed."),
         UnsupportedQueryFilterOperation(106, "Query contains unsupported filter operation: "),
         UnsupportedQuerySortOperation(107, "Query contains unsupported sort operation: "),

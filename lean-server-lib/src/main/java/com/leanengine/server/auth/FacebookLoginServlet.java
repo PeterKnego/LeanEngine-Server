@@ -17,10 +17,11 @@ public class FacebookLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String error = request.getParameter("error");
-        String code = request.getParameter("code");
+        String errorCode = request.getParameter("error");
+        String authorizationCode = request.getParameter("code");
 
-        if (error == null && code == null) {  // first part of Facebook OAuth flow
+        // checking the stage of a Facebook OAuth flow
+        if (errorCode == null && authorizationCode == null) {  // first part of Facebook OAuth flow
 
             String type = request.getParameter("type");
             String display = request.getParameter("display");
@@ -68,18 +69,17 @@ public class FacebookLoginServlet extends HttpServlet {
 
             // development server mocks Facebook logins
             if (ServerUtils.isDevServer()) {
-                // authenticate with Facebook Graph OAuth API
-                AuthToken lean_token = AuthService.createMockFacebookAccount("test@example.com");
-
-                // save token in session
-                HttpSession session = request.getSession();
-                session.setAttribute("lean_token", lean_token.token);
-
-                //send lean_token back to browser
-                try {
-                    response.sendRedirect(scheme.getUrl(lean_token.token, redirectUrl));
-                } catch (LeanException e) {
-                    response.sendRedirect(scheme.getErrorUrl(e, errorUrl));
+                String mockEmail = request.getParameter("email");
+                String action = request.getParameter("action");
+                if (mockEmail == null) {
+                    FacebookMockLogin.showForm(request, response);
+                } else {
+                    if ("Log Out".equals(action)) {
+                        response.sendRedirect(scheme.getErrorUrl(
+                                new LeanException(LeanException.Error.FacebookAuthError, " User cancelled login."), errorUrl));
+                    } else {
+                        FacebookMockLogin.login(request, response, mockEmail, scheme, redirectUrl, errorUrl);
+                    }
                 }
                 return;
             }
@@ -111,12 +111,15 @@ public class FacebookLoginServlet extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.removeAttribute("lean_token");
 
+            // include the port number - usually needed for Dev server
             String hostname = request.getServerName();
             if (request.getLocalPort() != 80 && request.getLocalPort() != 0) {
                 hostname = hostname + ":" + request.getLocalPort();
             }
 
+            // get the 'state' parameter containing CSRF code
             String state = request.getParameter("state");
+            // 'state' must be equal to 'antiCSRF' attribute saved to web session
             if (state == null || !state.equals(session.getAttribute("antiCSRF"))) {
                 // oauth error - redirect back to client with error
                 response.sendRedirect(new WebScheme(request.getScheme(),
@@ -127,7 +130,7 @@ public class FacebookLoginServlet extends HttpServlet {
             String redirectUrl = null;
             String errorUrl = null;
 
-            // 'state' parameter has format "login_type:token:redirect_url"
+            // 'state' parameter has format "login_type:CSRFtoken:redirect_url:error_url"
             // extract the login type from 'state' parameter
             Scheme scheme;
             if (state.startsWith("mob:")) {
@@ -144,17 +147,19 @@ public class FacebookLoginServlet extends HttpServlet {
             // error url might not have been supplied if this second part of the flow was invoked directly
             errorUrl = (errorUrl == null || errorUrl.isEmpty()) ? "/loginerror" : errorUrl;
 
-            if (error != null) {
+            // did Facebook OAuth return error?
+            if (errorCode != null) {
                 // oauth error - redirect back to client with error
                 response.sendRedirect(scheme.getErrorUrl(
-                        new LeanException(LeanException.Error.FacebookAuthError, " OAuth error: " + error), errorUrl));
+                        new LeanException(LeanException.Error.FacebookAuthError, " OAuth error: " + errorCode), errorUrl));
 
-            } else {
+            } else { // no error
                 String currentUrl = request.getRequestURL().toString();
 
                 try {
                     // authenticate with Facebook Graph OAuth API
-                    AuthToken lean_token = FacebookAuth.graphAuthenticate(currentUrl, code);
+                    // this makes a direct connection from server to 'https://graph.facebook.com/oauth/access_token'
+                    AuthToken lean_token = FacebookAuth.authenticateWithOAuthGraphAPI(currentUrl, authorizationCode);
 
                     // save token in session
                     session.setAttribute("lean_token", lean_token.token);
