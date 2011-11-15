@@ -1,5 +1,6 @@
 package com.leanengine.server.entity;
 
+import com.google.appengine.api.datastore.Cursor;
 import com.leanengine.server.JsonUtils;
 import com.leanengine.server.LeanException;
 import org.codehaus.jackson.JsonNode;
@@ -15,6 +16,7 @@ public class LeanQuery {
     private List<QueryFilter> filters = new ArrayList<QueryFilter>();
     private List<QuerySort> sorts = new ArrayList<QuerySort>();
     private QueryOptions queryOptions;
+    private Cursor cursor;
 
     public LeanQuery(String kind) {
         this.kind = kind;
@@ -30,6 +32,14 @@ public class LeanQuery {
 
     public String getKind() {
         return kind;
+    }
+
+    public Cursor getCursor() {
+        return cursor;
+    }
+
+    public void setCursor(Cursor cursor) {
+        this.cursor = cursor;
     }
 
     public List<QuerySort> getSorts() {
@@ -52,24 +62,32 @@ public class LeanQuery {
         ObjectNode json = JsonUtils.getObjectMapper().createObjectNode();
         json.put("kind", kind);
 
-        ObjectNode jsonFilters = JsonUtils.getObjectMapper().createObjectNode();
-        for (QueryFilter filter : filters) {
-            ObjectNode jsonFilter;
-            if (jsonFilters.has(filter.getProperty())) {
-                jsonFilter = (ObjectNode) jsonFilters.get(filter.getProperty());
-            } else {
-                jsonFilter = JsonUtils.getObjectMapper().createObjectNode();
+        if (!filters.isEmpty()) {
+            ObjectNode jsonFilters = JsonUtils.getObjectMapper().createObjectNode();
+            for (QueryFilter filter : filters) {
+                ObjectNode jsonFilter;
+                if (jsonFilters.has(filter.getProperty())) {
+                    jsonFilter = (ObjectNode) jsonFilters.get(filter.getProperty());
+                } else {
+                    jsonFilter = JsonUtils.getObjectMapper().createObjectNode();
+                }
+                JsonUtils.addTypedNode(jsonFilter, filter.getOperator().toJSON(), filter.getValue());
+                jsonFilters.put(filter.getProperty(), jsonFilter);
             }
-            JsonUtils.addTypedNode(jsonFilter, filter.getOperator().toJSON(), filter.getValue());
-            jsonFilters.put(filter.getProperty(), jsonFilter);
+            json.put("filter", jsonFilters);
         }
-        json.put("filter", jsonFilters);
 
-        ObjectNode jsonSorts = JsonUtils.getObjectMapper().createObjectNode();
-        for (QuerySort sort : sorts) {
-            jsonSorts.put(sort.getProperty(), sort.getDirection().toJSON());
+        if (!sorts.isEmpty()) {
+            ObjectNode jsonSorts = JsonUtils.getObjectMapper().createObjectNode();
+            for (QuerySort sort : sorts) {
+                jsonSorts.put(sort.getProperty(), sort.getDirection().toJSON());
+            }
+            json.put("sort", jsonSorts);
         }
-        json.put("sort", jsonSorts);
+
+        if (this.cursor != null) {
+           json.put("cursor", cursor.toWebSafeString());
+        }
 
         return json;
     }
@@ -145,6 +163,11 @@ public class LeanQuery {
             query.setQueryOptions(QueryOptions.fromJson(options));
         }
 
+        // get 'cursor'
+        JsonNode cursorNode = jsonNode.get("cursor");
+        if (cursorNode != null) {
+            query.cursor = Cursor.fromWebSafeString(cursorNode.getTextValue());
+        }
 
         return query;
     }

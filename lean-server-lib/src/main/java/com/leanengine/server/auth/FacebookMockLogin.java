@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 public class FacebookMockLogin {
 
     protected static void showForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         PrintWriter writer = response.getWriter();
 
         writer.append("<html>\n").append("<body>\n")

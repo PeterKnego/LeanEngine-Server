@@ -19,33 +19,36 @@ public class DatastoreUtils {
     private static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     private static Pattern pattern = Pattern.compile("^[A-Za-z][A-Za-z_0-9]*");
 
-    public static Entity getPrivateEntity(String kind, String entityId) throws LeanException {
-        findCurrentAccount();
+    public static Entity getPrivateEntity(String kind, long entityId) throws LeanException {
+        LeanAccount account = findCurrentAccount();
 
-        if (entityId == null || kind == null) throw new LeanException(LeanException.Error.EntityNotFound,
+        if (entityId <= 0 || kind == null) throw new LeanException(LeanException.Error.EntityNotFound,
                 " Entity 'kind' and 'id' must NOT be null.");
 
-        long entityIdLong = Long.valueOf(entityId);
         Entity entity;
         try {
-            entity = datastore.get(KeyFactory.createKey(kind, entityIdLong));
+            entity = datastore.get(KeyFactory.createKey(kind, entityId));
         } catch (EntityNotFoundException e) {
             throw new LeanException(LeanException.Error.EntityNotFound);
         }
+
+        if (account.id != (Long) entity.getProperty("_account"))
+                  throw new LeanException(LeanException.Error.NotAuthorized,
+                          " Account not authorized to access entity '" + kind + "'with ID '" + entityId + "'");
+
         return entity;
     }
 
 
-    public static void deletePrivateEntity(String entityKind, String entityId) throws LeanException {
+    public static void deletePrivateEntity(String entityKind, long entityId) throws LeanException {
         LeanAccount account = findCurrentAccount();
 
-        if (entityId == null || entityKind == null) throw new LeanException(LeanException.Error.EntityNotFound,
+        if (entityId <= 0 || entityKind == null) throw new LeanException(LeanException.Error.EntityNotFound,
                 " Entity 'kind' and 'id' must NOT be null.");
 
-        long entityIdLong = Long.valueOf(entityId);
         Entity entity;
         try {
-            entity = datastore.get(KeyFactory.createKey(entityKind, entityIdLong));
+            entity = datastore.get(KeyFactory.createKey(entityKind, entityId));
         } catch (EntityNotFoundException e) {
             throw new LeanException(LeanException.Error.EntityNotFound);
         }
