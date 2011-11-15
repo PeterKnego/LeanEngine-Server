@@ -70,7 +70,7 @@ public class DatastoreUtils {
     public static List<Entity> getPrivateEntities() throws LeanException {
         findCurrentAccount();
 
-        List<String> kindNames = findAllEtityKinds();
+        List<String> kindNames = findAllEntityKinds();
 
         List<Entity> result = new ArrayList<Entity>();
 
@@ -134,19 +134,12 @@ public class DatastoreUtils {
         }
 
         FetchOptions fetchOptions = FetchOptions.Builder.withDefaults();
-        QueryOptions options = leanQuery.getQueryOptions();
-        if (leanQuery.getQueryOptions() != null) {
-            if (options.getLimit() != null)
-                fetchOptions.limit(options.getLimit());
-            if (options.getOffset() != null)
-                fetchOptions.offset(options.getOffset());
-            if (options.getPrefetchSize() != null)
-                fetchOptions.prefetchSize(options.getPrefetchSize());
-            if (options.getStartCursor() != null)
-                fetchOptions.startCursor(Cursor.fromWebSafeString(options.getStartCursor()));
-            if (options.getEndCursor() != null)
-                fetchOptions.endCursor(Cursor.fromWebSafeString(options.getEndCursor()));
-        }
+        if(leanQuery.getCursor() != null )
+            fetchOptions.startCursor(leanQuery.getCursor());
+        if(leanQuery.getOffset() != null)
+            fetchOptions.offset(leanQuery.getOffset());
+        if(leanQuery.getLimit() != null)
+            fetchOptions.limit(leanQuery.getLimit());
 
         try {
             PreparedQuery pq = datastore.prepare(query);
@@ -160,7 +153,7 @@ public class DatastoreUtils {
         }
     }
 
-    public static List<String> findAllEtityKinds() throws LeanException {
+    public static List<String> findAllEntityKinds() throws LeanException {
 
         Query q = new Query(Query.KIND_METADATA_KIND);
 

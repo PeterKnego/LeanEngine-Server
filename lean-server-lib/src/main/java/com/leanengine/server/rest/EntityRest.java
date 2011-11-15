@@ -19,14 +19,14 @@ public class EntityRest {
 
     @GET
     @Path("/{entityName}/{entityId}")
-    public JsonNode getEntity(@PathParam("entityName") String entityName, @PathParam("entityId") String entityId) throws LeanException {
+    public JsonNode getEntity(@PathParam("entityName") String entityName, @PathParam("entityId") long entityId) throws LeanException {
         Entity entity = DatastoreUtils.getPrivateEntity(entityName, entityId);
         return JsonUtils.entityToJson(entity);
     }
 
     @DELETE
     @Path("/{entityName}/{entityId}")
-    public void deleteEntity(@PathParam("entityName") String entityName, @PathParam("entityId") String entityId) throws LeanException {
+    public void deleteEntity(@PathParam("entityName") String entityName, @PathParam("entityId") long entityId) throws LeanException {
          DatastoreUtils.deletePrivateEntity(entityName, entityId);
     }
 

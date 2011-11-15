@@ -15,8 +15,9 @@ public class LeanQuery {
     private final String kind;
     private List<QueryFilter> filters = new ArrayList<QueryFilter>();
     private List<QuerySort> sorts = new ArrayList<QuerySort>();
-    private QueryOptions queryOptions;
     private Cursor cursor;
+    private Integer offset;
+    private Integer limit;
 
     public LeanQuery(String kind) {
         this.kind = kind;
@@ -48,14 +49,6 @@ public class LeanQuery {
 
     public List<QueryFilter> getFilters() {
         return filters;
-    }
-
-    public QueryOptions getQueryOptions() {
-        return queryOptions;
-    }
-
-    public void setQueryOptions(QueryOptions queryOptions) {
-        this.queryOptions = queryOptions;
     }
 
     public JsonNode toJson() throws LeanException {
@@ -152,24 +145,40 @@ public class LeanQuery {
             }
         }
 
-        // get 'options'
-        ObjectNode options;
-        try {
-            options = (ObjectNode) jsonNode.get("options");
-        } catch (ClassCastException cce) {
-            throw new LeanException(LeanException.Error.QueryJSON, " Property 'options' must be a JSON object.");
-        }
-        if (options != null) {
-            query.setQueryOptions(QueryOptions.fromJson(options));
-        }
-
         // get 'cursor'
         JsonNode cursorNode = jsonNode.get("cursor");
         if (cursorNode != null) {
             query.cursor = Cursor.fromWebSafeString(cursorNode.getTextValue());
         }
 
+        // get 'cursor'
+        JsonNode limitNode = jsonNode.get("limit");
+        if (limitNode != null) {
+            query.limit = limitNode.getIntValue();
+        }
+
+        // get 'cursor'
+        JsonNode offsetNode = jsonNode.get("offset");
+        if (offsetNode != null) {
+            query.offset = offsetNode.getIntValue();
+        }
+
         return query;
     }
 
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
 }
