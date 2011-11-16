@@ -1,7 +1,0 @@
-**LeanEngine GAE server license**
-
-ALl files contained in this source package are licensed 
-under GNU Lesser General Public License v3.
-
-For more info see http://www.gnu.org/licenses/lgpl.html
-

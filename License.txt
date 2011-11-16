@@ -1,7 +1,7 @@
-**LeanEngine GAE server license**
+LeanEngine Server license
 
-ALl files contained in this source package are licensed 
-under GNU Lesser General Public License v3.
+All files for LeanEngine example server application, contained in ./lean-server-main directory and sub-directories,
+are licensed under modified BSD license. See lean-server-main/License-application.txt
 
-For more info see http://www.gnu.org/licenses/lgpl.html
-
+All files for LeanEngine server library, contained in ./lean-server-lib directory and sub-directories,
+are licensed under GNU Lesser General Public License v3. See lean-server-lib/License-library.txt

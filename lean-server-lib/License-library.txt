@@ -1,0 +1,4 @@
+All files for this library project, contained in this directory and sub-directories,
+are licensed under GNU Lesser General Public License version 3.
+
+For more info see http://www.gnu.org/licenses/lgpl.html

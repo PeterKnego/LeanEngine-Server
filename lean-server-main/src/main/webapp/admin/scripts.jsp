@@ -1,10 +1,9 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: peter
-  Date: 10/22/11
-  Time: 2:31 PM
-  To change this template use File | Settings | File Templates.
---%>
+  ~ This software is released under the BSD license. For full license see License-library.txt file.
+  ~
+  ~ Copyright (c) 2011, Peter Knego & Matjaz Tercelj
+  ~ All rights reserved.
+  --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head></head>

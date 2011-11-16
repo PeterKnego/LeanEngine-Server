@@ -1,3 +1,10 @@
+<%--
+  ~ This software is released under the BSD license. For full license see License-library.txt file.
+  ~
+  ~ Copyright (c) 2011, Peter Knego & Matjaz Tercelj
+  ~ All rights reserved.
+  --%>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Login error</title>
