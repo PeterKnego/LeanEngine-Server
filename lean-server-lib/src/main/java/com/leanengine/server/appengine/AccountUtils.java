@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.leanengine.server.auth.AuthToken;
 import com.leanengine.server.auth.LeanAccount;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -42,7 +43,7 @@ public class AccountUtils {
         return (accountEntity == null) ? null : toLeanAccount(accountEntity);
     }
 
-     public static LeanAccount findAccountByEmail(String email, String provider) {
+    public static LeanAccount findAccountByEmail(String email, String provider) {
         if (email == null) {
             log.severe("Empty email. Can not find account without email.");
             return null;
@@ -106,7 +107,6 @@ public class AccountUtils {
         accountEntity.setProperty("_nickname", leanAccount.nickName);
         for (Map.Entry<String, Object> property : leanAccount.providerProperties.entrySet()) {
             // properties must not start with underscore - this is reserved for system properties
-            if (property.getKey().startsWith("_")) continue;
             accountEntity.setProperty(property.getKey(), property.getValue());
         }
         Key accountKey = datastore.put(accountEntity);
@@ -115,12 +115,18 @@ public class AccountUtils {
 
     public static LeanAccount toLeanAccount(Entity entity) {
 
+        Map<String, Object> props = new HashMap<String, Object>(entity.getProperties().size() - 3);
+        for (Map.Entry<String, Object> entityProp : entity.getProperties().entrySet()) {
+            if(!entityProp.getKey().startsWith("_"))
+                props.put(entityProp.getKey(), entityProp.getValue());
+        }
+
         return new LeanAccount(
                 entity.getKey().getId(),
                 (String) entity.getProperty("_nickname"),
                 (String) entity.getProperty("_provider_id"),
                 (String) entity.getProperty("_provider"),
-                entity.getProperties()
+                props
         );
     }
 }

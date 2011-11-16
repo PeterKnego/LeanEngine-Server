@@ -14,8 +14,10 @@ public class LogoutServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String token = (String) session.getAttribute("lean_token");
-        if (token != null) AuthService.resetCurrentAuthData();
-        session.removeAttribute("lean_token");
+        if (token != null) {
+            AuthService.resetCurrentAuthData();
+            session.removeAttribute("lean_token");
+        }
 
         String redirectUrl;
         if (request.getParameter("redirect") != null) {

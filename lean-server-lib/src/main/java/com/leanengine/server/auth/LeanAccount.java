@@ -1,7 +1,9 @@
 package com.leanengine.server.auth;
 
-import com.google.appengine.api.datastore.Key;
+import com.leanengine.server.JsonUtils;
+import com.leanengine.server.LeanException;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class LeanAccount {
@@ -18,5 +20,13 @@ public class LeanAccount {
         this.providerId = providerId;
         this.provider = provider;
         this.providerProperties = providerProperties;
+    }
+
+    public String toJson() throws LeanException {
+        try {
+            return JsonUtils.getObjectMapper().writeValueAsString(this);
+        } catch (IOException e) {
+            throw new LeanException(LeanException.Error.ErrorSerializingToJson, "\n\n" + e.getMessage());
+        }
     }
 }

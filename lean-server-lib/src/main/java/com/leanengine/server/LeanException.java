@@ -34,7 +34,8 @@ public class LeanException extends Throwable {
         AppEngineMissingIndex(41, "AppEngine query error: missing index. Try running this query on dev server to " +
                 "automatically create needed indexes and then upload to production."),
         ServerSessionsNotEnabled(42, "Sessions not enabled on server."),
-        MissingRedirectUrl(43, "Login request must have URL parameter 'onlogin' used for redirect on successful login.");
+        MissingRedirectUrl(43, "Login request must have URL parameter 'onlogin' used for redirect on successful login."),
+        ErrorSerializingToJson(44, "Object could not be serialized to JSON");
 
 
         public int errorCode;
