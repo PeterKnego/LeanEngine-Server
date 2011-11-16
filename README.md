@@ -27,5 +27,8 @@ Google Plus: https://plus.google.com/u/0/115510332327304386091
 License
 -------
 
-Licensed under GNU Lesser General Public License v3.
-For more info see http://www.gnu.org/licenses/lgpl.html
+Example server application is licensed under BSD-style license.
+
+Server library is licensed under LGPL v3.
+
+For more info see License.txt in root directory.
