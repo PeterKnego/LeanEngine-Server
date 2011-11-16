@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.leanengine.server</groupId>
-    <artifactId>main</artifactId>
+    <artifactId>leanengine-server</artifactId>
     <packaging>war</packaging>
     <version>0.8</version>
 
@@ -19,8 +19,16 @@
         <!--Lean Engine Lib project-->
         <dependency>
             <groupId>com.leanengine.server</groupId>
-            <artifactId>lib</artifactId>
-            <version>0.1</version>
+            <artifactId>leanengine-server-lib</artifactId>
+            <version>0.8</version>
+        </dependency>
+
+        <!--AppEngine SDK API-->
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
+            <version>${gae.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!--Servlets & JSPs-->

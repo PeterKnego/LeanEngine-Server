@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.leanengine.server</groupId>
-    <artifactId>leanengine-gae-lib</artifactId>
+    <artifactId>leanengine-server-lib</artifactId>
     <packaging>jar</packaging>
     <version>0.8</version>
 
@@ -41,11 +41,11 @@
             <artifactId>resteasy-jackson-provider</artifactId>
             <version>2.2.2.GA</version>
         </dependency>
-        <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <version>2.7.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>xalan</groupId>-->
+            <!--<artifactId>xalan</artifactId>-->
+            <!--<version>2.7.1</version>-->
+        <!--</dependency>-->
 
         <!--AppEngine-->
         <!--<dependency>-->
