@@ -11,7 +11,7 @@
     <name>Lean Server Parent Project</name>
 
     <modules>
-        <module>lean-server-main</module>
+        <module>lean-server-example</module>
         <module>lean-server-lib</module>
     </modules>
 

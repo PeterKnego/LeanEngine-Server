@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.leanengine.server</groupId>
-    <artifactId>leanengine-server</artifactId>
+    <artifactId>leanengine-server-main</artifactId>
     <packaging>war</packaging>
     <version>0.8</version>
 

@@ -1,7 +1,7 @@
 LeanEngine Server license
 
-All files for LeanEngine example server application, contained in ./lean-server-main directory and sub-directories,
-are licensed under modified BSD license. See lean-server-main/License-application.txt
+All files for LeanEngine example server application, contained in ./lean-server-example directory and sub-directories,
+are licensed under modified BSD license. See lean-server-example/License-example.txt
 
 All files for LeanEngine server library, contained in ./lean-server-lib directory and sub-directories,
 are licensed under GNU Lesser General Public License v3. See lean-server-lib/License-library.txt
