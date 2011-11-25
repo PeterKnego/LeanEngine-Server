@@ -1,6 +1,7 @@
 package com.leanengine.server;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Text;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
@@ -107,6 +108,8 @@ public class JsonUtils {
 
         if ("date".equals(type)) {
             return new Date(getLongFromValueNode("value", node));
+        } else if ("text".equals(type)) {
+            return new Text(getStringFromValueNode("value", node));
         } else if ("geopt".equals(type)) {
             throw new IllegalArgumentException("Value nodes of type 'geopt' are not yet implemented.");
         } else if ("geohash".equals(type)) {
@@ -115,8 +118,6 @@ public class JsonUtils {
             throw new IllegalArgumentException("Value nodes of type 'blob' are not yet implemented.");
         } else if ("shortblob".equals(type)) {
             throw new IllegalArgumentException("Value nodes of type 'shortblob' are not yet implemented.");
-        } else if ("text".equals(type)) {
-            throw new IllegalArgumentException("Value nodes of type 'text' are not yet implemented.");
         } else if ("reference".equals(type)) {
             throw new IllegalArgumentException("Value nodes of type 'reference' are not yet implemented.");
         } else {
@@ -127,6 +128,10 @@ public class JsonUtils {
 
     private static long getLongFromValueNode(String fieldName, JsonNode node) throws LeanException {
         return getNodeValue(fieldName, node).getLongValue();
+    }
+
+    private static String getStringFromValueNode(String fieldName, JsonNode node) throws LeanException {
+        return getNodeValue(fieldName, node).getTextValue();
     }
 
     private static JsonNode getNodeValue(String fieldName, JsonNode node) throws LeanException {
@@ -160,8 +165,10 @@ public class JsonUtils {
             node.add((String) value);
         } else if (value instanceof Boolean) {
             node.add((Boolean) value);
-        } else if(value instanceof Date){
+        } else if (value instanceof Date) {
             node.add(getDateNode((Date) value));
+        } else if (value instanceof Text) {
+            node.add(getTextNode((Text) value));
         }
     }
 
@@ -174,8 +181,10 @@ public class JsonUtils {
             node.put(key, (String) value);
         } else if (value instanceof Boolean) {
             node.put(key, (Boolean) value);
-        } else if(value instanceof Date){
+        } else if (value instanceof Date) {
             node.put(key, getDateNode((Date) value));
+        } else if (value instanceof Text) {
+            node.put(key, getTextNode((Text) value));
         }
     }
 
@@ -183,6 +192,13 @@ public class JsonUtils {
         ObjectNode dateNode = JsonUtils.getObjectMapper().createObjectNode();
         dateNode.put("type", "date");
         dateNode.put("value", date.getTime());
+        return dateNode;
+    }
+
+     private static ObjectNode getTextNode(Text text) {
+        ObjectNode dateNode = JsonUtils.getObjectMapper().createObjectNode();
+        dateNode.put("type", "text");
+        dateNode.put("value", text.getValue());
         return dateNode;
     }
 
