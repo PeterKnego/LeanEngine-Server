@@ -3,40 +3,42 @@ package com.leanengine.server;
 public class LeanException extends Throwable {
 
     public enum Error {
-        // input errors have codes above 100
-        // they happen when client sends wrong requests
-        IllegalEntityName(101, "Illegal LeanEntity name."),
-        EmptyEntity(102, "LeanEntity contains no properties."),
-        IllegalEntityFormat(103, "Illegal LeanEntity format."),
-        EntityNotFound(104, "Entity not found."),
-        QueryJSON(105, "Query JSON could not be parsed."),
-        UnsupportedQueryFilterOperation(106, "Query contains unsupported filter operation: "),
-        UnsupportedQuerySortOperation(107, "Query contains unsupported sort operation: "),
-        ValueToJSON(108, "Value node could not be converted to a supported type."),
+        // reply errors are produced by wrong client parameters
+        IllegalEntityName(1, "Illegal LeanEntity name."),
+        EmptyEntity(2, "LeanEntity contains no properties."),
+        EntityNotFound(3, "Entity not found."),
+        ErrorSerializingToJson(4, "Object could not be serialized to JSON"),
+        QueryJSON(5, "Query JSON could not be parsed."),
+        UnsupportedQueryFilterOperation(6, "Query contains unsupported filter operation: "),
+        UnsupportedQuerySortOperation(7, "Query contains unsupported sort operation: "),
+        ValueToJSON(8, "Value node could not be converted to a supported type."),
 
-        // server errors have codes below 100
+        // user is not authorized to access resource
+        // or error during authorization process
+        // error codes 100-199
+        FacebookAuthError(101, "Facebook authorization error."),
+        FacebookAuthParseError(102, "Facebook authorization error."),
+        FacebookAuthConnectError(103, "Could not connect to Facebook authorization server."),
+        FacebookAuthResponseError(104, "Facebook OAuth server error."),
+        FacebookAuthMissingParam(105, "OAuth error: missing parameters in server reply."),
+        FacebookAuthNoConnection(106, "Could not connect to Facebook authorization server."),
+        FacebookAuthNotEnabled(107, "Server configuration error: Facebook login not enabled."),
+        FacebookAuthMissingAppId(108, "Server configuration error: missing Facebook Application ID."),
+        FacebookAuthMissingAppSecret(109, "Server configuration error: missing Facebook Application Secret."),
+        FacebookAuthMissingCRSF(110, "Facebook OAuth request missing CSRF protection code."),
+        OpenIdAuthFailed(111, "OpenID authentication failed."),
+        OpenIdAuthNotEnabled(112, "Server configuration error: OpenID login not enabled."),
+        NotAuthorized(113, "No account active or account not authorized to access this resource."),
+        MissingRedirectUrl(114, "Login request must have URL parameter 'onlogin' used for redirect on successful login."),
+
+        // server errors have codes between 200-299
         // they happen when server has problems fulfilling request
-        FacebookAuthError(1, "Facebook authorization error."),
-        FacebookAuthParseError(2, "Facebook authorization error."),
-        FacebookAuthConnectError(3, "Could not connect to Facebook authorization server."),
-        FacebookAuthResponseError(4, "Facebook OAuth server error."),
-        FacebookAuthMissingParam(5, "OAuth error: missing parameters in server reply."),
-        FacebookAuthNoConnection(6, "Could not connect to Facebook authorization server."),
-        FacebookAuthNotEnabled(7, "Server configuration error: Facebook login not enabled."),
-        FacebookAuthMissingAppId(8, "Server configuration error: missing Facebook Application ID."),
-        FacebookAuthMissingAppSecret(9, "Server configuration error: missing Facebook Application Secret."),
-        FacebookAuthMissingCRSF(10, "Facebook OAuth request missing CSRF protection code."),
-        OpenIdAuthFailed(11, "OpenID authentication failed."),
-        OpenIdAuthNotEnabled(12, "Server configuration error: OpenID login not enabled."),
-        ScriptExecutionError(20, "Error executing script: "),
-        ScriptOutputError(21, "Illegal script result error: custom scripts must produce a Javascript object. Script: "),
-        NotAuthorized(40, "No account active or account not authorized to access this resource."),
-        AppEngineMissingIndex(41, "AppEngine query error: missing index. Try running this query on dev server to " +
+        ScriptExecutionError(201, "Error executing script: "),
+        ScriptOutputError(202, "Illegal script result error: custom scripts must produce a Javascript object. Script: "),
+        AppEngineMissingIndex(203, "AppEngine query error: missing index. Try running this query on dev server to " +
                 "automatically create needed indexes and then upload to production."),
-        ServerSessionsNotEnabled(42, "Sessions not enabled on server."),
-        MissingRedirectUrl(43, "Login request must have URL parameter 'onlogin' used for redirect on successful login."),
-        ErrorSerializingToJson(44, "Object could not be serialized to JSON");
-
+         // this is only produced on client, when server sends malformed error message
+         LeanExceptionToJSON(204, "Error parsing error JSON data.");
 
         public int errorCode;
         public String errorMessage;

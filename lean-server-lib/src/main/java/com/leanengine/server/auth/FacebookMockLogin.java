@@ -16,12 +16,12 @@ public class FacebookMockLogin {
         PrintWriter writer = response.getWriter();
 
         writer.append("<html>\n").append("<body>\n")
-                .append("<form method='get' style='text-align:center; font:13px sans-serif'>\n")
-                .append("<div style='width: 20em; margin: 1em auto; text-align: left; padding: 0 2em 1.25em 2em; background-color: #d6e9f8; border: 2px solid #67a7e3'>\n")
+                .append("<form method='get' style='text-align:center; font:14px sans-serif'>\n")
+                .append("<div style='width: 15em; margin: 1em auto; text-align: left; padding: 0 2em 1.25em 2em; background-color: #d6e9f8; border: 2px solid #67a7e3'>\n")
                 .append("<h3>Facebook mock login</h3>\n")
                 .append("<p style='padding: 0; margin: 0'>\n")
                 .append("<label for='email' style='width: 3em'>Email:</label>\n")
-                .append(" <input type='text' name='email' id='email' value='test@example.com'>\n")
+                .append("<input style='width: 15em' type='text' name='email' id='email' value='test@example.com'>\n")
                 .append("</p>\n").append("<p style='margin: .5em 0 0 3em; font-size:12px'>\n")
                 .append("</p>\n").append("<input type='hidden' name='continue' value='error'>\n")
                 .append("<p style='margin-left: 3em;'>\n");

@@ -69,8 +69,8 @@
     } else {
         // load settings
         Map<String, Object> settings = LeanEngineSettings.getSettings();
-        fbLoginEnable = settings.get("fbLoginEnable") != null;
-        openIdLoginEnable = settings.get("openIdLoginEnable") != null;
+        fbLoginEnable = settings.get("fbLoginEnable") != null && settings.get("fbLoginEnable").equals(true);
+        openIdLoginEnable = settings.get("openIdLoginEnable") != null && settings.get("openIdLoginEnable").equals(true);
         fbAppId = settings.get("fbAppId") != null ? (String) settings.get("fbAppId") : "";
         fbAppSecret = settings.get("fbAppSecret") != null ? (String) settings.get("fbAppSecret") : "";
     }
