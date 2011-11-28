@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 
 public class FacebookMockLogin {
 
-    protected static void showForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected static void showForm(HttpServletRequest request, HttpServletResponse response, boolean isMobile) throws ServletException, IOException {
 
         PrintWriter writer = response.getWriter();
 
@@ -24,8 +24,11 @@ public class FacebookMockLogin {
                 .append(" <input type='text' name='email' id='email' value='test@example.com'>\n")
                 .append("</p>\n").append("<p style='margin: .5em 0 0 3em; font-size:12px'>\n")
                 .append("</p>\n").append("<input type='hidden' name='continue' value='error'>\n")
-                .append("<p style='margin-left: 3em;'>\n")
-                .append("<input name='action' type='submit' value='Log In'>\n")
+                .append("<p style='margin-left: 3em;'>\n");
+
+        if (isMobile) writer.append("<input name='type' type='hidden' value='mobile'>\n");
+
+        writer.append("<input name='action' type='submit' value='Log In'>\n")
                 .append("<input name='action' type='submit' value='Log Out'>\n")
                 .append("</p>\n")
                 .append("</div>\n")

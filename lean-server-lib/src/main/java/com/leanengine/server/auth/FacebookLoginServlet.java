@@ -72,7 +72,7 @@ public class FacebookLoginServlet extends HttpServlet {
                 String mockEmail = request.getParameter("email");
                 String action = request.getParameter("action");
                 if (mockEmail == null) {
-                    FacebookMockLogin.showForm(request, response);
+                    FacebookMockLogin.showForm(request, response, isMobile);
                 } else {
                     if ("Log Out".equals(action)) {
                         response.sendRedirect(scheme.getErrorUrl(

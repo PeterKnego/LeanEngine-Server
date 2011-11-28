@@ -51,18 +51,4 @@ public class EntityRest {
         return "{\"id\":" + entityID + "}";
     }
 
-
-//    @POST
-//    @Path("/simple")
-//    public long simple() throws LeanException {
-//
-//        Entity entityEntity = new Entity("today");
-//
-//        entityEntity.setProperty("datum", new Date());
-//        entityEntity.setProperty("_account", AuthService.getCurrentAccount().id);
-//
-//        DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-//        return ds.put(entityEntity).getId();
-//    }
-
 }
