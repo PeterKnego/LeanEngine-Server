@@ -114,12 +114,6 @@ public class FacebookAuth {
             String fbAccessToken = null, expires = null;
             String[] splitResponse = responseContent.split("&");
 
-            if (splitResponse.length != 1) {
-                // error: facebook should return two arguments: access_token & expires
-                throw new LeanException(LeanException.Error.FacebookAuthMissingParam,
-                        "Facebook response should contain only one parameter, \n" +
-                                "Response content: \n" + responseContent);
-            }
             for (String split : splitResponse) {
                 String[] parts = split.split("=");
                 if (parts.length != 2) break;
