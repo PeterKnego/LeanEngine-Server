@@ -17,7 +17,7 @@
 
     <properties>
         <!-- convenience to define GAE version in one line -->
-        <gae.version>1.5.5</gae.version>
+        <gae.version>1.7.0</gae.version>
 
         <!--AppEngine application ID - used when uploading to AppEngine-->
         <gae.app.id>lean-engine</gae.app.id>

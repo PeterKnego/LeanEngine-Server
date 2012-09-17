@@ -6,8 +6,11 @@
     <!--Sessions MUST be enabled-->
     <sessions-enabled>true</sessions-enabled>
 
+    <threadsafe>true</threadsafe>
+
     <admin-console>
         <page name="LeanEngine Settings" url="/admin/settings.jsp"/>
+        <page name="OAuth Settings" url="/admin/oauth-settings.jsp"/>
         <page name="LeanEngine Scripts" url="/admin/scripts.jsp"/>
     </admin-console>
 
